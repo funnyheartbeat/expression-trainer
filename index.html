@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Expression Trainer">
+<title>Mindy's Expression Trainer</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a2e;
+    --paper: #f5f0e8;
+    --cream: #ede8dc;
+    --accent: #c2440e;
+    --gold: #b8860b;
+    --muted: #7a7265;
+    --card-bg: #faf7f2;
+    --border: #d4ccbc;
+    --green: #2d6a4f;
+    --shadow: 0 4px 24px rgba(26,26,46,0.10);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* ── LOADING SCREEN ── */
+  #loading-screen {
+    position: fixed; inset: 0; z-index: 999;
+    background: var(--ink);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 20px; transition: opacity 0.5s;
+  }
+  #loading-screen.hidden { opacity: 0; pointer-events: none; }
+  .loading-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem; color: var(--paper);
+  }
+  .loading-title span { color: var(--accent); font-style: italic; }
+  .loading-sub { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: #888; letter-spacing: 0.1em; }
+  .loading-bar-wrap { width: 200px; height: 3px; background: #333; border-radius: 2px; }
+  .loading-bar-fill { height: 100%; background: var(--accent); border-radius: 2px; width: 0; transition: width 0.3s; }
+  .loading-error { color: #ff6b6b; font-size: 0.85rem; text-align: center; max-width: 280px; line-height: 1.6; display: none; }
+  .retry-btn {
+    padding: 10px 24px; background: var(--accent); color: white;
+    border: none; border-radius: 8px; font-size: 0.88rem; cursor: pointer;
+    display: none;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 16px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 3px solid var(--accent);
+    position: sticky; top: 0; z-index: 100;
+  }
+  header h1 { font-family: 'Playfair Display', serif; font-size: 1.3rem; }
+  header h1 span { color: var(--accent); font-style: italic; }
+  .stats-bar { display: flex; gap: 16px; font-family: 'DM Mono', monospace; font-size: 0.72rem; color: #aaa; }
+  .stats-bar b { color: var(--paper); }
+  .sync-btn {
+    background: none; border: 1px solid #444; border-radius: 6px;
+    color: #aaa; font-size: 0.72rem; padding: 4px 10px; cursor: pointer;
+    font-family: 'DM Mono', monospace; transition: all 0.2s;
+  }
+  .sync-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .syncing { animation: pulse 1s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+  /* ── TABS ── */
+  .tabs {
+    display: flex; background: var(--cream);
+    border-bottom: 2px solid var(--border);
+    padding: 0 16px; gap: 2px;
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    padding: 12px 18px; background: none; border: none; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 500;
+    color: var(--muted); border-bottom: 3px solid transparent;
+    margin-bottom: -2px; transition: all 0.2s; white-space: nowrap;
+  }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* ── MAIN ── */
+  main { max-width: 780px; margin: 0 auto; padding: 24px 16px; }
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* ── FLASHCARD ── */
+  .mode-select { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+  .mode-btn {
+    padding: 7px 16px; border: 2px solid var(--border);
+    background: var(--card-bg); border-radius: 20px;
+    font-size: 0.8rem; font-weight: 500; cursor: pointer;
+    transition: all 0.2s; color: var(--muted);
+  }
+  .mode-btn.active { border-color: var(--accent); color: var(--accent); background: #fff5f0; }
+
+  .progress-bar-wrap { height: 4px; background: var(--border); border-radius: 2px; margin-bottom: 20px; }
+  .progress-bar-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.3s; }
+
+  .card-wrap { perspective: 1200px; height: 260px; cursor: pointer; margin-bottom: 16px; }
+  .card-inner {
+    position: relative; width: 100%; height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.55s cubic-bezier(0.4,0,0.2,1);
+  }
+  .card-wrap.flipped .card-inner { transform: rotateY(180deg); }
+  .card-face {
+    position: absolute; width: 100%; height: 100%;
+    backface-visibility: hidden;
+    background: var(--card-bg); border: 2px solid var(--border);
+    border-radius: 16px; box-shadow: var(--shadow);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 24px; text-align: center;
+  }
+  .card-back { transform: rotateY(180deg); }
+  .card-label { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; margin-bottom: 12px; }
+  .card-expression { font-family: 'Playfair Display', serif; font-size: 1.7rem; font-weight: 700; color: var(--ink); line-height: 1.25; margin-bottom: 8px; }
+  .card-hint { font-size: 0.8rem; color: var(--green); font-weight: 600; }
+  .card-meaning { font-size: 1.1rem; font-weight: 500; color: var(--ink); margin-bottom: 10px; }
+  .card-nuance { font-size: 0.8rem; color: var(--muted); line-height: 1.6; max-width: 480px; }
+  .card-example { margin-top: 10px; font-size: 0.8rem; color: var(--accent); font-style: italic; line-height: 1.5; }
+
+  .flip-hint { text-align: center; font-size: 0.72rem; color: var(--muted); margin-bottom: 14px; font-family: 'DM Mono', monospace; }
+  .card-nav { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
+  .nav-btn {
+    width: 44px; height: 44px; border-radius: 50%;
+    border: 2px solid var(--border); background: var(--card-bg);
+    font-size: 1.2rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s; color: var(--ink);
+  }
+  .nav-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .card-counter { font-family: 'DM Mono', monospace; font-size: 0.8rem; color: var(--muted); min-width: 60px; text-align: center; }
+  .know-btn {
+    padding: 10px 20px; border-radius: 20px; border: none; cursor: pointer;
+    font-weight: 600; font-size: 0.83rem; transition: all 0.2s;
+  }
+  .know-btn.yes { background: var(--green); color: white; }
+  .know-btn.no { background: #e0d8cc; color: var(--ink); }
+  .know-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+
+  /* ── PRACTICE ── */
+  .shuffle-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .shuffle-row h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; }
+  .icon-btn {
+    padding: 8px 14px; border: 2px solid var(--border);
+    background: var(--card-bg); border-radius: 8px;
+    font-size: 0.8rem; cursor: pointer; transition: all 0.2s;
+    color: var(--muted); font-weight: 500;
+  }
+  .icon-btn:hover { border-color: var(--ink); color: var(--ink); }
+  .practice-card {
+    background: var(--card-bg); border: 2px solid var(--border);
+    border-radius: 16px; padding: 24px; box-shadow: var(--shadow); margin-bottom: 16px;
+  }
+  .practice-expression { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
+  .practice-meaning { font-size: 0.85rem; color: var(--muted); margin-bottom: 16px; }
+  textarea {
+    width: 100%; min-height: 80px; padding: 12px 14px;
+    border: 2px solid var(--border); border-radius: 10px;
+    font-family: 'DM Sans', sans-serif; font-size: 0.95rem;
+    background: white; color: var(--ink); resize: vertical;
+    transition: border-color 0.2s; line-height: 1.6;
+  }
+  textarea:focus { outline: none; border-color: var(--accent); }
+  textarea::placeholder { color: var(--muted); }
+  .submit-btn {
+    margin-top: 10px; padding: 12px 24px;
+    background: var(--ink); color: var(--paper);
+    border: none; border-radius: 8px; font-weight: 600;
+    font-size: 0.88rem; cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .submit-btn:hover { background: var(--accent); }
+  .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .feedback-box {
+    margin-top: 14px; padding: 16px 18px;
+    background: white; border-radius: 10px;
+    border-left: 4px solid var(--accent);
+    font-size: 0.86rem; line-height: 1.8; display: none;
+  }
+  .feedback-box.visible { display: block; }
+  .feedback-box .fb-label { font-family: 'DM Mono', monospace; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 8px; }
+  .spinner { display: none; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── QUIZ ── */
+  .quiz-score { font-family: 'DM Mono', monospace; font-size: 0.8rem; color: var(--muted); margin-bottom: 14px; }
+  .quiz-prompt {
+    background: var(--card-bg); border: 2px solid var(--border);
+    border-radius: 16px; padding: 24px; margin-bottom: 16px; box-shadow: var(--shadow);
+  }
+  .quiz-q-label { font-family: 'DM Mono', monospace; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 10px; }
+  .quiz-sentence { font-size: 1.05rem; line-height: 1.9; color: var(--ink); }
+  .quiz-blank { display: inline-block; min-width: 130px; border-bottom: 3px solid var(--accent); color: transparent; background: rgba(194,68,14,0.06); border-radius: 4px; padding: 0 8px; }
+  .choices { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+  .choice-btn {
+    padding: 12px 18px; border: 2px solid var(--border);
+    background: var(--card-bg); border-radius: 10px;
+    text-align: left; cursor: pointer; font-size: 0.88rem;
+    font-family: 'DM Sans', sans-serif; transition: all 0.2s; color: var(--ink);
+  }
+  .choice-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+  .choice-btn.correct { border-color: var(--green); background: #f0faf5; color: var(--green); font-weight: 600; }
+  .choice-btn.wrong { border-color: var(--accent); background: #fff5f0; color: var(--accent); }
+  .choice-btn:disabled { cursor: default; }
+  .quiz-result { padding: 12px 16px; border-radius: 10px; font-size: 0.86rem; display: none; line-height: 1.7; }
+  .quiz-result.show { display: block; }
+  .quiz-result.ok { background: #f0faf5; border-left: 4px solid var(--green); }
+  .quiz-result.fail { background: #fff5f0; border-left: 4px solid var(--accent); }
+  .quiz-nav { display: flex; justify-content: flex-end; margin-top: 14px; }
+  .next-btn { padding: 10px 22px; background: var(--ink); color: var(--paper); border: none; border-radius: 8px; font-weight: 600; font-size: 0.86rem; cursor: pointer; transition: all 0.2s; display: none; }
+  .next-btn.show { display: block; }
+  .next-btn:hover { background: var(--accent); }
+
+  /* ── LIST ── */
+  .search-box {
+    width: 100%; padding: 12px 14px; margin-bottom: 16px;
+    border: 2px solid var(--border); border-radius: 10px;
+    font-family: 'DM Sans', sans-serif; font-size: 0.95rem;
+    background: white; color: var(--ink);
+  }
+  .search-box:focus { outline: none; border-color: var(--accent); }
+  .list-count { font-family: 'DM Mono', monospace; font-size: 0.76rem; color: var(--muted); margin-bottom: 12px; }
+  .expression-list { display: flex; flex-direction: column; gap: 8px; }
+  .expr-item {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 12px; padding: 14px 18px;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .expr-item:hover, .expr-item.expanded { border-color: var(--accent); }
+  .expr-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .expr-name { font-family: 'Playfair Display', serif; font-size: 0.95rem; font-weight: 700; color: var(--accent); flex-shrink: 0; }
+  .expr-kor { font-size: 0.82rem; color: var(--muted); text-align: right; }
+  .expr-detail { display: none; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
+  .expr-item.expanded .expr-detail { display: block; }
+  .detail-row { margin-bottom: 6px; font-size: 0.82rem; line-height: 1.6; }
+  .dl { font-family: 'DM Mono', monospace; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); display: block; margin-bottom: 2px; }
+  .example-text { color: var(--accent); font-style: italic; }
+
+  /* ── LAST UPDATED ── */
+  .last-updated { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--muted); text-align: center; padding: 16px; }
+
+  @media (max-width: 500px) {
+    header { padding: 12px 14px; }
+    header h1 { font-size: 1.1rem; }
+    .stats-bar { display: none; }
+    main { padding: 16px 10px; }
+    .card-expression { font-size: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div id="loading-screen">
+  <div class="loading-title">Mindy's <span>Expression Trainer</span></div>
+  <div class="loading-sub">LOADING FROM GOOGLE SHEETS...</div>
+  <div class="loading-bar-wrap"><div class="loading-bar-fill" id="load-bar"></div></div>
+  <div class="loading-error" id="load-error"></div>
+  <button class="retry-btn" id="retry-btn" onclick="loadData()">다시 시도</button>
+</div>
+
+<header>
+  <h1>Mindy's <span>Expression Trainer</span></h1>
+  <div style="display:flex;align-items:center;gap:12px">
+    <div class="stats-bar">
+      <span>총 <b id="total-count">0</b>개</span>
+      <span>완료 <b id="known-count">0</b>개</span>
+    </div>
+    <button class="sync-btn" id="sync-btn" onclick="loadData()">↻ 동기화</button>
+  </div>
+</header>
+
+<nav class="tabs">
+  <button class="tab-btn active" data-tab="flashcard">📇 플래시카드</button>
+  <button class="tab-btn" data-tab="practice">✍️ 문장 만들기</button>
+  <button class="tab-btn" data-tab="quiz">🎯 빈칸 퀴즈</button>
+  <button class="tab-btn" data-tab="list">📋 전체 목록</button>
+</nav>
+
+<main>
+
+  <!-- FLASHCARD -->
+  <div id="flashcard" class="panel active">
+    <div class="mode-select">
+      <button class="mode-btn active" data-mode="all">전체</button>
+      <button class="mode-btn" data-mode="unknown">미학습만</button>
+      <button class="mode-btn" data-mode="class">Class</button>
+      <button class="mode-btn" data-mode="video">Video</button>
+    </div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="fc-progress"></div></div>
+    <div class="card-wrap" id="flashcard-card" onclick="flipCard()">
+      <div class="card-inner">
+        <div class="card-face card-front">
+          <div class="card-label">표현</div>
+          <div class="card-expression" id="fc-expr">—</div>
+          <div class="card-hint" id="fc-hint"></div>
+        </div>
+        <div class="card-face card-back">
+          <div class="card-label">뜻 &amp; 뉘앙스</div>
+          <div class="card-meaning" id="fc-meaning">—</div>
+          <div class="card-nuance" id="fc-nuance"></div>
+          <div class="card-example" id="fc-example"></div>
+        </div>
+      </div>
+    </div>
+    <div class="flip-hint">카드를 탭하면 뒤집힙니다</div>
+    <div class="card-nav">
+      <button class="know-btn no" onclick="markCard(false)">다시 볼게요</button>
+      <button class="nav-btn" onclick="prevCard()">‹</button>
+      <div class="card-counter" id="fc-counter">— / —</div>
+      <button class="nav-btn" onclick="nextCard()">›</button>
+      <button class="know-btn yes" onclick="markCard(true)">알았어요 ✓</button>
+    </div>
+  </div>
+
+  <!-- PRACTICE -->
+  <div id="practice" class="panel">
+    <div class="shuffle-row">
+      <h3>문장 만들기 연습</h3>
+      <button class="icon-btn" onclick="shufflePractice()">🔀 다른 표현</button>
+    </div>
+    <div class="practice-card">
+      <div class="practice-expression" id="pr-expr">—</div>
+      <div class="practice-meaning" id="pr-meaning">—</div>
+      <textarea id="pr-input" placeholder="이 표현을 사용해서 영어 문장을 써보세요. ESG, proxy voting, engagement 등 업무 상황으로 쓰면 더 잘 외워져요!"></textarea>
+      <button class="submit-btn" id="pr-submit" onclick="submitPractice()">
+        <span>AI 피드백 받기</span>
+        <div class="spinner" id="pr-spinner"></div>
+      </button>
+      <div class="feedback-box" id="pr-feedback">
+        <div class="fb-label">AI 피드백</div>
+        <div id="pr-feedback-text"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="quiz" class="panel">
+    <div class="quiz-score" id="quiz-score">점수: 0 / 0</div>
+    <div class="quiz-prompt">
+      <div class="quiz-q-label">다음 문장에 알맞은 표현을 고르세요</div>
+      <div class="quiz-sentence" id="quiz-sentence">—</div>
+    </div>
+    <div class="choices" id="quiz-choices"></div>
+    <div class="quiz-result" id="quiz-result"></div>
+    <div class="quiz-nav">
+      <button class="next-btn" id="quiz-next" onclick="nextQuiz()">다음 문제 →</button>
+    </div>
+  </div>
+
+  <!-- LIST -->
+  <div id="list" class="panel">
+    <input class="search-box" type="text" placeholder="🔍 표현 또는 뜻 검색..." oninput="filterList(this.value)">
+    <div class="list-count" id="list-count"></div>
+    <div class="expression-list" id="expression-list"></div>
+  </div>
+
+</main>
+<div class="last-updated" id="last-updated"></div>
+
+<script>
+// ─── CONFIG ─────────────────────────────────────────────
+const SHEET_ID = '1BLJ9o0-jxc4nlSSd2lvRn2_RMNIdrsbwZasYfqkzti0';
+const SHEETS = [
+  { name: 'Class', src: 'class' },
+  { name: 'Video', src: 'video' },
+];
+const CACHE_KEY = 'expressionData_v2';
+const CACHE_TIME_KEY = 'expressionDataTime_v2';
+const CACHE_TTL = 60 * 60 * 1000; // 1 hour
+
+// ─── STATE ──────────────────────────────────────────────
+let data = [];
+let known = new Set(JSON.parse(localStorage.getItem('knownExpressions') || '[]'));
+let fcDeck = [], fcIndex = 0, fcMode = 'all';
+let prCurrent = null;
+let quizScore = 0, quizTotal = 0, quizCurrent = null, quizAnswered = false;
+
+// ─── LOAD DATA ───────────────────────────────────────────
+async function loadData(forceRefresh = false) {
+  const syncBtn = document.getElementById('sync-btn');
+  syncBtn.classList.add('syncing');
+  syncBtn.textContent = '↻ 로딩중...';
+
+  setLoadBar(10);
+  showLoadError(false);
+
+  // Check cache
+  if (!forceRefresh) {
+    const cached = localStorage.getItem(CACHE_KEY);
+    const cachedTime = localStorage.getItem(CACHE_TIME_KEY);
+    if (cached && cachedTime && (Date.now() - parseInt(cachedTime)) < CACHE_TTL) {
+      data = JSON.parse(cached);
+      onDataLoaded();
+      setLoadBar(100);
+      setTimeout(hideLoading, 400);
+      syncBtn.classList.remove('syncing');
+      syncBtn.textContent = '↻ 동기화';
+      return;
+    }
+  }
+
+  try {
+    const allRows = [];
+    for (let i = 0; i < SHEETS.length; i++) {
+      const sheet = SHEETS[i];
+      setLoadBar(20 + i * 35);
+      const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&sheet=${encodeURIComponent(sheet.name)}`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`시트 로드 실패: ${sheet.name}`);
+      const csv = await res.text();
+      const rows = parseCSV(csv);
+      // Find header row
+      const headerIdx = rows.findIndex(r => r.some(c => c.includes('표현') || c.toLowerCase().includes('expression')));
+      if (headerIdx === -1) continue;
+      const headers = rows[headerIdx].map(h => h.trim().toLowerCase());
+      const eIdx = headers.findIndex(h => h.includes('표현') || h.includes('expression'));
+      const mIdx = headers.findIndex(h => h.includes('뜻') || h.includes('meaning'));
+      const nIdx = headers.findIndex(h => h.includes('뉘앙스') || h.includes('nuance'));
+      const exIdx = headers.findIndex(h => h.includes('예문') || h.includes('example'));
+      for (let r = headerIdx + 1; r < rows.length; r++) {
+        const row = rows[r];
+        const expr = eIdx >= 0 ? row[eIdx]?.trim() : '';
+        if (!expr) continue;
+        allRows.push({
+          e: expr,
+          m: mIdx >= 0 ? row[mIdx]?.trim() || '' : '',
+          n: nIdx >= 0 ? row[nIdx]?.trim() || '' : '',
+          ex: exIdx >= 0 ? row[exIdx]?.trim() || '' : '',
+          src: sheet.src
+        });
+      }
+    }
+
+    // Deduplicate
+    const seen = new Set();
+    data = allRows.filter(d => { if(!d.e || seen.has(d.e)) return false; seen.add(d.e); return true; });
+
+    localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+    localStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
+
+    setLoadBar(100);
+    onDataLoaded();
+    setTimeout(hideLoading, 400);
+
+    const now = new Date();
+    document.getElementById('last-updated').textContent =
+      `마지막 동기화: ${now.toLocaleDateString('ko-KR')} ${now.toLocaleTimeString('ko-KR', {hour:'2-digit',minute:'2-digit'})}`;
+
+  } catch(err) {
+    // Try cache fallback
+    const cached = localStorage.getItem(CACHE_KEY);
+    if (cached) {
+      data = JSON.parse(cached);
+      onDataLoaded();
+      hideLoading();
+      document.getElementById('last-updated').textContent = '⚠️ 오프라인 — 캐시 데이터 사용 중';
+    } else {
+      showLoadError('Google Sheets에 연결할 수 없어요.\n\n시트가 "링크가 있는 모든 사용자" 공개로 설정되어 있는지 확인해주세요.\n\n(' + err.message + ')');
+    }
+  }
+
+  syncBtn.classList.remove('syncing');
+  syncBtn.textContent = '↻ 동기화';
+}
+
+function onDataLoaded() {
+  updateStats();
+  buildDeck();
+  shufflePractice();
+  renderList('');
+  initQuiz();
+}
+
+function setLoadBar(pct) {
+  document.getElementById('load-bar').style.width = pct + '%';
+}
+function hideLoading() {
+  document.getElementById('loading-screen').classList.add('hidden');
+  setTimeout(() => document.getElementById('loading-screen').style.display = 'none', 500);
+}
+function showLoadError(msg) {
+  const el = document.getElementById('load-error');
+  const btn = document.getElementById('retry-btn');
+  if (msg) {
+    el.textContent = msg; el.style.display = 'block'; btn.style.display = 'block';
+  } else {
+    el.style.display = 'none'; btn.style.display = 'none';
+  }
+}
+
+// ─── CSV PARSER ──────────────────────────────────────────
+function parseCSV(text) {
+  const rows = [];
+  const lines = text.split('\n');
+  for (const line of lines) {
+    if (!line.trim()) continue;
+    const cells = [];
+    let cur = '', inQ = false;
+    for (let i = 0; i < line.length; i++) {
+      const c = line[i];
+      if (c === '"') {
+        if (inQ && line[i+1] === '"') { cur += '"'; i++; }
+        else inQ = !inQ;
+      } else if (c === ',' && !inQ) {
+        cells.push(cur); cur = '';
+      } else cur += c;
+    }
+    cells.push(cur);
+    rows.push(cells);
+  }
+  return rows;
+}
+
+// ─── TABS ────────────────────────────────────────────────
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+    if(btn.dataset.tab === 'practice') shufflePractice();
+    if(btn.dataset.tab === 'list') renderList(document.querySelector('.search-box')?.value || '');
+  });
+});
+
+document.querySelectorAll('.mode-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    fcMode = btn.dataset.mode;
+    buildDeck();
+  });
+});
+
+// ─── FLASHCARD ───────────────────────────────────────────
+function buildDeck() {
+  let pool = data;
+  if(fcMode === 'unknown') pool = data.filter(d => !known.has(d.e));
+  else if(fcMode === 'class') pool = data.filter(d => d.src === 'class');
+  else if(fcMode === 'video') pool = data.filter(d => d.src === 'video');
+  fcDeck = shuffle([...pool]);
+  fcIndex = 0;
+  const card = document.getElementById('flashcard-card');
+  if(card) card.classList.remove('flipped');
+  renderCard();
+}
+
+function renderCard() {
+  if(!fcDeck.length) {
+    document.getElementById('fc-expr').textContent = '카드가 없어요';
+    document.getElementById('fc-meaning').textContent = '';
+    document.getElementById('fc-counter').textContent = '0 / 0';
+    return;
+  }
+  const d = fcDeck[fcIndex];
+  document.getElementById('fc-expr').textContent = d.e;
+  document.getElementById('fc-hint').textContent = known.has(d.e) ? '✓ 학습완료' : '';
+  document.getElementById('fc-meaning').textContent = d.m;
+  document.getElementById('fc-nuance').textContent = d.n;
+  document.getElementById('fc-example').textContent = d.ex ? '"' + d.ex + '"' : '';
+  document.getElementById('fc-counter').textContent = (fcIndex+1) + ' / ' + fcDeck.length;
+  document.getElementById('fc-progress').style.width = ((fcIndex+1)/fcDeck.length*100) + '%';
+  document.getElementById('flashcard-card').classList.remove('flipped');
+}
+
+function flipCard() { document.getElementById('flashcard-card').classList.toggle('flipped'); }
+function nextCard() { if(!fcDeck.length) return; fcIndex = (fcIndex+1) % fcDeck.length; renderCard(); }
+function prevCard() { if(!fcDeck.length) return; fcIndex = (fcIndex-1+fcDeck.length) % fcDeck.length; renderCard(); }
+function markCard(isKnown) {
+  if(!fcDeck.length) return;
+  if(isKnown) known.add(fcDeck[fcIndex].e); else known.delete(fcDeck[fcIndex].e);
+  localStorage.setItem('knownExpressions', JSON.stringify([...known]));
+  updateStats();
+  nextCard();
+}
+
+// ─── PRACTICE ────────────────────────────────────────────
+function shufflePractice() {
+  if(!data.length) return;
+  const pool = data.filter(d => d.m);
+  prCurrent = pool[Math.floor(Math.random() * pool.length)];
+  document.getElementById('pr-expr').textContent = prCurrent.e;
+  document.getElementById('pr-meaning').textContent = prCurrent.m;
+  const inp = document.getElementById('pr-input');
+  if(inp) inp.value = '';
+  const fb = document.getElementById('pr-feedback');
+  if(fb) fb.classList.remove('visible');
+  const btn = document.getElementById('pr-submit');
+  if(btn) btn.disabled = false;
+}
+
+async function submitPractice() {
+  const sentence = document.getElementById('pr-input').value.trim();
+  if(!sentence || !prCurrent) return;
+  const btn = document.getElementById('pr-submit');
+  const spinner = document.getElementById('pr-spinner');
+  btn.disabled = true;
+  spinner.style.display = 'block';
+
+  const prompt = `You are an English tutor helping a Korean ESG/investment professional improve her English.
+
+Expression to practice: "${prCurrent.e}"
+Korean meaning: "${prCurrent.m}"
+${prCurrent.n ? 'Usage notes: ' + prCurrent.n : ''}
+
+Her sentence: "${sentence}"
+
+Give feedback in Korean (3-4 sentences):
+1. Whether the expression is used correctly (✅ or ⚠️)
+2. What's good about the sentence
+3. One concrete suggestion or improved version if needed
+4. One example sentence using this expression in an ESG/investment/proxy voting professional context
+
+Keep it encouraging and practical.`;
+
+  try {
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1000,
+        messages: [{ role: "user", content: prompt }]
+      })
+    });
+    const json = await res.json();
+    const text = json.content?.find(b => b.type === 'text')?.text || '피드백을 받아오지 못했어요.';
+    document.getElementById('pr-feedback-text').innerHTML = text.replace(/\n/g, '<br>');
+    document.getElementById('pr-feedback').classList.add('visible');
+  } catch(e) {
+    document.getElementById('pr-feedback-text').textContent = '오류가 발생했어요. 다시 시도해주세요.';
+    document.getElementById('pr-feedback').classList.add('visible');
+  }
+  spinner.style.display = 'none';
+  btn.disabled = false;
+}
+
+// ─── QUIZ ─────────────────────────────────────────────────
+function initQuiz() { quizScore = 0; quizTotal = 0; updateQuizScore(); nextQuiz(); }
+function updateQuizScore() { document.getElementById('quiz-score').textContent = `점수: ${quizScore} / ${quizTotal}`; }
+
+function nextQuiz() {
+  if(!data.length) return;
+  quizAnswered = false;
+  document.getElementById('quiz-result').classList.remove('show','ok','fail');
+  document.getElementById('quiz-next').classList.remove('show');
+
+  const pool = data.filter(d => d.ex && d.ex.length > 10);
+  if(!pool.length) { document.getElementById('quiz-sentence').textContent = '예문이 있는 표현이 없어요.'; return; }
+  quizCurrent = pool[Math.floor(Math.random() * pool.length)];
+
+  const regex = new RegExp(quizCurrent.e.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'), 'i');
+  const sentence = quizCurrent.ex.replace(regex, '<span class="quiz-blank">_______________</span>');
+  document.getElementById('quiz-sentence').innerHTML = sentence;
+
+  const wrongs = shuffle(data.filter(d => d.e !== quizCurrent.e)).slice(0,3).map(d => d.e);
+  const choices = shuffle([quizCurrent.e, ...wrongs]);
+  const container = document.getElementById('quiz-choices');
+  container.innerHTML = '';
+  choices.forEach(c => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.textContent = c;
+    btn.onclick = () => selectAnswer(c, btn);
+    container.appendChild(btn);
+  });
+}
+
+function selectAnswer(choice, btn) {
+  if(quizAnswered) return;
+  quizAnswered = true; quizTotal++;
+  const correct = choice === quizCurrent.e;
+  if(correct) { quizScore++; btn.classList.add('correct'); }
+  else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('.choice-btn').forEach(b => { if(b.textContent === quizCurrent.e) b.classList.add('correct'); });
+  }
+  document.querySelectorAll('.choice-btn').forEach(b => b.disabled = true);
+  const res = document.getElementById('quiz-result');
+  if(correct) {
+    res.className = 'quiz-result show ok';
+    res.innerHTML = `✅ 정답! <b>${quizCurrent.e}</b> — ${quizCurrent.m}`;
+  } else {
+    res.className = 'quiz-result show fail';
+    res.innerHTML = `❌ 오답. 정답은 <b>${quizCurrent.e}</b><br>뜻: ${quizCurrent.m}`;
+  }
+  updateQuizScore();
+  document.getElementById('quiz-next').classList.add('show');
+}
+
+// ─── LIST ─────────────────────────────────────────────────
+function renderList(query) {
+  const q = query.toLowerCase();
+  const filtered = data.filter(d => !q || d.e.toLowerCase().includes(q) || d.m.includes(q));
+  document.getElementById('list-count').textContent = `${filtered.length}개 표현`;
+  const container = document.getElementById('expression-list');
+  container.innerHTML = '';
+  filtered.forEach(d => {
+    const el = document.createElement('div');
+    el.className = 'expr-item';
+    el.innerHTML = `
+      <div class="expr-top">
+        <span class="expr-name">${d.e}</span>
+        <span class="expr-kor">${d.m}</span>
+      </div>
+      <div class="expr-detail">
+        ${d.n ? `<div class="detail-row"><span class="dl">뉘앙스</span><span class="dv">${d.n}</span></div>` : ''}
+        ${d.ex ? `<div class="detail-row"><span class="dl">예문</span><span class="dv example-text">${d.ex}</span></div>` : ''}
+        <div class="detail-row"><span class="dl">출처</span><span class="dv">${d.src === 'class' ? '📚 Class' : '🎬 Video'}</span></div>
+      </div>`;
+    el.onclick = () => el.classList.toggle('expanded');
+    container.appendChild(el);
+  });
+}
+function filterList(q) { renderList(q); }
+
+// ─── UTILS ────────────────────────────────────────────────
+function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
+function updateStats() {
+  document.getElementById('total-count').textContent = data.length;
+  document.getElementById('known-count').textContent = known.size;
+}
+
+// ─── INIT ─────────────────────────────────────────────────
+loadData();
+</script>
+</body>
+</html>
