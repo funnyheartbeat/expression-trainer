@@ -797,13 +797,22 @@ function checkApiKeyOnStart() { const key = localStorage.getItem('geminiApiKey')
 async function geminiCall(prompt, maxTokens = 500) {
   const apiKey = localStorage.getItem('geminiApiKey');
   if (!apiKey) throw new Error('API 키 없음');
-  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
-    method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { maxOutputTokens: maxTokens } })
-  });
-  const json = await res.json();
-  if (json.error) throw new Error(json.error.message);
-  return json.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '';
+  const models = ['gemini-1.5-flash', 'gemini-1.5-flash-latest', 'gemini-pro'];
+  let lastErr = null;
+  for (const model of models) {
+    try {
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
+        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { maxOutputTokens: maxTokens } })
+      });
+      const json = await res.json();
+      if (json.error) throw new Error(json.error.message);
+      const text = json.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
+      if (text) return text;
+    } catch(e) { lastErr = e; }
+  }
+  throw lastErr || new Error('모든 모델 실패');
 }
 
 // ════════════════════════════════════════════════
@@ -1087,17 +1096,22 @@ async function showWordPopup(e, word, lineIdx) {
   }
 
   try {
-    const prompt = `Give a brief English dictionary entry for the word "${word}" as used in this sentence context.
-Return JSON only (no markdown):
-{"pos":"noun/verb/adj/adv/etc","meaning_ko":"한국어 뜻 (간결하게)","example":"Short example sentence using this word"}`;
-    const result = await geminiCall(prompt, 200);
-    const json = JSON.parse(result.replace(/```json|```/g,'').trim());
+    const prompt = `Look up the English word "${word}". Reply in this exact JSON format with no markdown fences:
+{"pos":"품사(영어)","meaning_ko":"한국어 뜻 (2-4단어로 간결하게)","example":"짧은 영어 예문"}`;
+    const result = await geminiCall(prompt, 300);
+    let json;
+    try {
+      json = JSON.parse(result.replace(/```json|```/g,'').trim());
+    } catch {
+      // fallback: extract meaning from plain text
+      json = { pos: '', meaning_ko: result.slice(0, 60), example: '' };
+    }
     document.getElementById('wp-pos').textContent = json.pos || '';
     document.getElementById('wp-meaning').textContent = json.meaning_ko || word;
     document.getElementById('wp-example').textContent = json.example ? '"' + json.example + '"' : '';
     currentWordForPopup = { word, meaning: json.meaning_ko || '', pos: json.pos || '', example: json.example || '' };
   } catch(err) {
-    document.getElementById('wp-meaning').textContent = '(뜻 로드 실패)';
+    document.getElementById('wp-meaning').textContent = '뜻: ' + err.message;
   }
 }
 
