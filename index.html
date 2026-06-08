@@ -198,7 +198,14 @@
     border-radius: 16px; padding: 24px; box-shadow: var(--shadow); margin-bottom: 16px;
   }
   .practice-expression { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
-  .practice-meaning { font-size: 0.85rem; color: var(--muted); margin-bottom: 16px; }
+  .practice-meaning { font-size: 0.85rem; color: var(--muted); margin-bottom: 12px; }
+  .pr-step-label { font-family: 'DM Mono', monospace; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 6px; }
+  .pr-divider { height: 1px; background: var(--border); margin: 16px 0; }
+  .pr-korean { font-size: 1.1rem; font-weight: 600; color: var(--ink); line-height: 1.6; margin-bottom: 12px; background: var(--cream); padding: 14px 16px; border-radius: 10px; border-left: 4px solid var(--gold); }
+  .pr-reveal-wrap { margin-bottom: 10px; }
+  .pr-reveal-btn { background: none; border: 1px dashed var(--border); border-radius: 8px; padding: 6px 14px; font-size: 0.8rem; color: var(--muted); cursor: pointer; transition: all 0.2s; }
+  .pr-reveal-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .pr-hint { font-size: 0.82rem; color: var(--green); background: #f0faf5; border-radius: 8px; padding: 10px 14px; margin-bottom: 10px; font-style: italic; line-height: 1.6; }
   textarea {
     width: 100%; min-height: 80px; padding: 12px 14px;
     border: 2px solid var(--border); border-radius: 10px;
@@ -374,13 +381,21 @@
   <!-- PRACTICE -->
   <div id="practice" class="panel">
     <div class="shuffle-row">
-      <h3>문장 만들기 연습</h3>
-      <button class="icon-btn" onclick="shufflePractice()">🔀 다른 표현</button>
+      <h3>영작 연습</h3>
+      <button class="icon-btn" onclick="shufflePractice()">🔀 다른 문장</button>
     </div>
     <div class="practice-card">
+      <div class="pr-step-label">사용할 표현</div>
       <div class="practice-expression" id="pr-expr">—</div>
       <div class="practice-meaning" id="pr-meaning">—</div>
-      <textarea id="pr-input" placeholder="이 표현을 사용해서 영어 문장을 써보세요. ESG, proxy voting, engagement 등 업무 상황으로 쓰면 더 잘 외워져요!"></textarea>
+      <div class="pr-divider"></div>
+      <div class="pr-step-label">다음 문장을 영작해보세요</div>
+      <div class="pr-korean" id="pr-korean">—</div>
+      <div class="pr-reveal-wrap">
+        <button class="pr-reveal-btn" id="pr-reveal-btn" onclick="toggleHint()">💡 힌트 보기</button>
+      </div>
+      <div class="pr-hint" id="pr-hint" style="display:none"></div>
+      <textarea id="pr-input" placeholder="위 한국어 문장을 영어로 써보세요. 표현을 꼭 포함해야 해요!"></textarea>
       <button class="submit-btn" id="pr-submit" onclick="submitPractice()">
         <span>AI 피드백 받기</span>
         <div class="spinner" id="pr-spinner"></div>
@@ -634,18 +649,90 @@ function markCard(isKnown) {
 }
 
 // ─── PRACTICE ────────────────────────────────────────────
-function shufflePractice() {
+let prKoreanSentence = '';
+let prHintSentence = '';
+let hintVisible = false;
+
+function toggleHint() {
+  hintVisible = !hintVisible;
+  document.getElementById('pr-hint').style.display = hintVisible ? 'block' : 'none';
+  document.getElementById('pr-reveal-btn').textContent = hintVisible ? '💡 힌트 숨기기' : '💡 힌트 보기';
+}
+
+async function shufflePractice() {
   if(!data.length) return;
   const pool = data.filter(d => d.m);
   prCurrent = pool[Math.floor(Math.random() * pool.length)];
+  prKoreanSentence = '';
+  prHintSentence = '';
+  hintVisible = false;
+
   document.getElementById('pr-expr').textContent = prCurrent.e;
   document.getElementById('pr-meaning').textContent = prCurrent.m;
+  document.getElementById('pr-korean').textContent = '문장 생성 중...';
+  document.getElementById('pr-hint').style.display = 'none';
+  document.getElementById('pr-hint').textContent = '';
+  document.getElementById('pr-reveal-btn').textContent = '💡 힌트 보기';
   const inp = document.getElementById('pr-input');
   if(inp) inp.value = '';
   const fb = document.getElementById('pr-feedback');
   if(fb) fb.classList.remove('visible');
   const btn = document.getElementById('pr-submit');
   if(btn) btn.disabled = false;
+
+  const apiKey = localStorage.getItem('geminiApiKey');
+  if(!apiKey) {
+    document.getElementById('pr-korean').textContent = '(API 키를 설정하면 한국어 문장이 자동 생성돼요)';
+    return;
+  }
+
+  try {
+    const prompt = `Create a natural Korean sentence that uses the concept of the English expression "${prCurrent.e}" (Korean meaning: ${prCurrent.m}).
+
+Rules:
+- Write ONE Korean sentence only
+- The sentence should be translatable to English using "${prCurrent.e}"
+- Use a professional ESG/investment/corporate governance context when possible
+- Make it realistic and practical
+- Output ONLY the Korean sentence, nothing else`;
+
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: { maxOutputTokens: 200 }
+        })
+      }
+    );
+    const json = await res.json();
+    if(json.error) throw new Error(json.error.message);
+    prKoreanSentence = json.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '';
+    document.getElementById('pr-korean').textContent = prKoreanSentence;
+
+    // Also pre-generate hint
+    const hintPrompt = `Translate this Korean sentence to English using the expression "${prCurrent.e}": "${prKoreanSentence}"
+Output ONLY the English sentence, nothing else.`;
+    const hintRes = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: hintPrompt }] }],
+          generationConfig: { maxOutputTokens: 200 }
+        })
+      }
+    );
+    const hintJson = await hintRes.json();
+    prHintSentence = hintJson.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '';
+    document.getElementById('pr-hint').textContent = '모범 번역: ' + prHintSentence;
+
+  } catch(e) {
+    document.getElementById('pr-korean').textContent = '(문장 생성 실패 — 다시 시도해주세요)';
+  }
 }
 
 async function submitPractice() {
@@ -663,21 +750,24 @@ async function submitPractice() {
   btn.disabled = true;
   spinner.style.display = 'block';
 
-  const prompt = `You are an English tutor helping a Korean ESG/investment professional improve her English.
+  const prompt = `You are an English tutor helping a Korean ESG/investment professional practice English translation.
 
-Expression to practice: "${prCurrent.e}"
-Korean meaning: "${prCurrent.m}"
+Task: She was asked to translate this Korean sentence into English using the expression "${prCurrent.e}".
+
+Korean sentence to translate: "${prKoreanSentence}"
+Target expression: "${prCurrent.e}" (Korean: ${prCurrent.m})
 ${prCurrent.n ? 'Usage notes: ' + prCurrent.n : ''}
+${prHintSentence ? 'Reference translation: "' + prHintSentence + '"' : ''}
 
-Her sentence: "${sentence}"
+Her translation: "${sentence}"
 
-Give feedback in Korean (3-4 sentences):
-1. Whether the expression is used correctly (✅ or ⚠️)
-2. What is good about the sentence
-3. One concrete suggestion or improved version if needed
-4. One example sentence using this expression in an ESG/investment/proxy voting professional context
+Give feedback in Korean with these sections:
+1. **표현 사용** — Did she use "${prCurrent.e}" correctly? (✅ or ⚠️ with brief explanation)
+2. **잘한 점** — What is good about her translation
+3. **개선 포인트** — One specific improvement (grammar, word choice, naturalness)
+4. **모범 번역** — Show an ideal translation of the Korean sentence
 
-Be encouraging and practical.`;
+Be specific, encouraging, and concise.`;
 
   try {
     const res = await fetch(
