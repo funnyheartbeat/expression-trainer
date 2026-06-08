@@ -687,14 +687,17 @@ async function shufflePractice() {
   }
 
   try {
-    const prompt = `Create a natural Korean sentence that uses the concept of the English expression "${prCurrent.e}" (Korean meaning: ${prCurrent.m}).
+    const prompt = `당신은 영어 선생님입니다. 아래 영어 표현을 활용할 수 있는 완전한 한국어 문장을 1개 만들어주세요.
 
-Rules:
-- Write ONE Korean sentence only
-- The sentence should be translatable to English using "${prCurrent.e}"
-- Use a professional ESG/investment/corporate governance context when possible
-- Make it realistic and practical
-- Output ONLY the Korean sentence, nothing else`;
+영어 표현: "${prCurrent.e}"
+한국어 뜻: "${prCurrent.m}"
+
+조건:
+- 반드시 완전한 문장(주어 + 서술어)으로 작성
+- ESG, 기업지배구조, 투자, 주주활동 맥락 우선
+- 문장 끝에 마침표 포함
+- 한국어 문장만 출력, 다른 설명 없음
+- 예시: "NPS는 이번 주주총회에서 반대표를 던지며 시장에 강한 신뢰의 메시지를 보냈다."`;
 
     const res = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
