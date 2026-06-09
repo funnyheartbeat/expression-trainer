@@ -22,64 +22,140 @@
     --shadow: 0 4px 24px rgba(26,26,46,0.10);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'DM Sans', sans-serif; background: var(--paper); color: var(--ink); min-height: 100vh; -webkit-tap-highlight-color: transparent; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    -webkit-tap-highlight-color: transparent;
+  }
 
-  /* LOADING */
-  #loading-screen { position: fixed; inset: 0; z-index: 999; background: var(--ink); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; transition: opacity 0.5s; }
+  /* ── LOADING SCREEN ── */
+  #loading-screen {
+    position: fixed; inset: 0; z-index: 999;
+    background: var(--ink);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 20px; transition: opacity 0.5s;
+  }
   #loading-screen.hidden { opacity: 0; pointer-events: none; }
-  .loading-title { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--paper); }
+  .loading-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem; color: var(--paper);
+  }
   .loading-title span { color: var(--accent); font-style: italic; }
   .loading-sub { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: #888; letter-spacing: 0.1em; }
   .loading-bar-wrap { width: 200px; height: 3px; background: #333; border-radius: 2px; }
   .loading-bar-fill { height: 100%; background: var(--accent); border-radius: 2px; width: 0; transition: width 0.3s; }
   .loading-error { color: #ff6b6b; font-size: 0.85rem; text-align: center; max-width: 280px; line-height: 1.6; display: none; }
-  .retry-btn { padding: 10px 24px; background: var(--accent); color: white; border: none; border-radius: 8px; font-size: 0.88rem; cursor: pointer; display: none; }
+  .retry-btn {
+    padding: 10px 24px; background: var(--accent); color: white;
+    border: none; border-radius: 8px; font-size: 0.88rem; cursor: pointer;
+    display: none;
+  }
 
-  /* API KEY MODAL */
-  #apikey-modal { position: fixed; inset: 0; z-index: 998; background: rgba(26,26,46,0.85); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; padding: 20px; }
+  /* ── API KEY MODAL ── */
+  #apikey-modal {
+    position: fixed; inset: 0; z-index: 998;
+    background: rgba(26,26,46,0.85); backdrop-filter: blur(4px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+  }
   #apikey-modal.hidden { display: none; }
-  .apikey-box { background: var(--card-bg); border-radius: 16px; padding: 32px 28px; max-width: 420px; width: 100%; box-shadow: 0 8px 40px rgba(0,0,0,0.3); }
+  .apikey-box {
+    background: var(--card-bg); border-radius: 16px;
+    padding: 32px 28px; max-width: 420px; width: 100%;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.3);
+  }
   .apikey-box h2 { font-family: "Playfair Display", serif; font-size: 1.3rem; margin-bottom: 8px; }
   .apikey-box p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; margin-bottom: 20px; }
-  .apikey-input { width: 100%; padding: 12px 14px; border: 2px solid var(--border); border-radius: 10px; font-size: 0.88rem; font-family: "DM Mono", monospace; background: white; color: var(--ink); margin-bottom: 12px; }
+  .apikey-input {
+    width: 100%; padding: 12px 14px; border: 2px solid var(--border);
+    border-radius: 10px; font-size: 0.88rem; font-family: "DM Mono", monospace;
+    background: white; color: var(--ink); margin-bottom: 12px;
+  }
   .apikey-input:focus { outline: none; border-color: var(--accent); }
-  .apikey-save { width: 100%; padding: 12px; background: var(--ink); color: var(--paper); border: none; border-radius: 8px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; }
+  .apikey-save {
+    width: 100%; padding: 12px; background: var(--ink); color: var(--paper);
+    border: none; border-radius: 8px; font-weight: 600; font-size: 0.9rem;
+    cursor: pointer; transition: all 0.2s;
+  }
   .apikey-save:hover { background: var(--accent); }
   .apikey-note { font-size: 0.75rem; color: var(--muted); margin-top: 12px; line-height: 1.5; }
   .apikey-skip { background: none; border: none; color: var(--muted); font-size: 0.8rem; cursor: pointer; margin-top: 8px; text-decoration: underline; }
 
-  /* HEADER */
-  header { background: var(--ink); color: var(--paper); padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid var(--accent); position: sticky; top: 0; z-index: 100; }
+  /* ── HEADER ── */
+  header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 16px 24px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 3px solid var(--accent);
+    position: sticky; top: 0; z-index: 100;
+  }
   header h1 { font-family: 'Playfair Display', serif; font-size: 1.3rem; }
   header h1 span { color: var(--accent); font-style: italic; }
   .stats-bar { display: flex; gap: 16px; font-family: 'DM Mono', monospace; font-size: 0.72rem; color: #aaa; }
   .stats-bar b { color: var(--paper); }
-  .sync-btn { background: none; border: 1px solid #444; border-radius: 6px; color: #aaa; font-size: 0.72rem; padding: 4px 10px; cursor: pointer; font-family: 'DM Mono', monospace; transition: all 0.2s; }
+  .sync-btn {
+    background: none; border: 1px solid #444; border-radius: 6px;
+    color: #aaa; font-size: 0.72rem; padding: 4px 10px; cursor: pointer;
+    font-family: 'DM Mono', monospace; transition: all 0.2s;
+  }
   .sync-btn:hover { border-color: var(--accent); color: var(--accent); }
   .syncing { animation: pulse 1s ease-in-out infinite; }
   @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
 
-  /* TABS */
-  .tabs { display: flex; background: var(--cream); border-bottom: 2px solid var(--border); padding: 0 16px; gap: 2px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  /* ── TABS ── */
+  .tabs {
+    display: flex; background: var(--cream);
+    border-bottom: 2px solid var(--border);
+    padding: 0 16px; gap: 2px;
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+  }
   .tabs::-webkit-scrollbar { display: none; }
-  .tab-btn { padding: 12px 18px; background: none; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 500; color: var(--muted); border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.2s; white-space: nowrap; }
+  .tab-btn {
+    padding: 12px 18px; background: none; border: none; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 500;
+    color: var(--muted); border-bottom: 3px solid transparent;
+    margin-bottom: -2px; transition: all 0.2s; white-space: nowrap;
+  }
   .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
 
-  /* MAIN */
-  main { max-width: 900px; margin: 0 auto; padding: 24px 16px; }
+  /* ── MAIN ── */
+  main { max-width: 780px; margin: 0 auto; padding: 24px 16px; }
   .panel { display: none; }
   .panel.active { display: block; }
 
-  /* FLASHCARD */
+  /* ── FLASHCARD ── */
   .mode-select { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
-  .mode-btn { padding: 7px 16px; border: 2px solid var(--border); background: var(--card-bg); border-radius: 20px; font-size: 0.8rem; font-weight: 500; cursor: pointer; transition: all 0.2s; color: var(--muted); }
+  .mode-btn {
+    padding: 7px 16px; border: 2px solid var(--border);
+    background: var(--card-bg); border-radius: 20px;
+    font-size: 0.8rem; font-weight: 500; cursor: pointer;
+    transition: all 0.2s; color: var(--muted);
+  }
   .mode-btn.active { border-color: var(--accent); color: var(--accent); background: #fff5f0; }
+
   .progress-bar-wrap { height: 4px; background: var(--border); border-radius: 2px; margin-bottom: 20px; }
   .progress-bar-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.3s; }
+
   .card-wrap { perspective: 1200px; height: 260px; cursor: pointer; margin-bottom: 16px; }
-  .card-inner { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform 0.55s cubic-bezier(0.4,0,0.2,1); }
+  .card-inner {
+    position: relative; width: 100%; height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.55s cubic-bezier(0.4,0,0.2,1);
+  }
   .card-wrap.flipped .card-inner { transform: rotateY(180deg); }
-  .card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; background: var(--card-bg); border: 2px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; text-align: center; }
+  .card-face {
+    position: absolute; width: 100%; height: 100%;
+    backface-visibility: hidden;
+    background: var(--card-bg); border: 2px solid var(--border);
+    border-radius: 16px; box-shadow: var(--shadow);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 24px; text-align: center;
+  }
   .card-back { transform: rotateY(180deg); }
   .card-label { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; margin-bottom: 12px; }
   .card-expression { font-family: 'Playfair Display', serif; font-size: 1.7rem; font-weight: 700; color: var(--ink); line-height: 1.25; margin-bottom: 8px; }
@@ -87,22 +163,40 @@
   .card-meaning { font-size: 1.1rem; font-weight: 500; color: var(--ink); margin-bottom: 10px; }
   .card-nuance { font-size: 0.8rem; color: var(--muted); line-height: 1.6; max-width: 480px; }
   .card-example { margin-top: 10px; font-size: 0.8rem; color: var(--accent); font-style: italic; line-height: 1.5; }
+
   .flip-hint { text-align: center; font-size: 0.72rem; color: var(--muted); margin-bottom: 14px; font-family: 'DM Mono', monospace; }
   .card-nav { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
-  .nav-btn { width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--border); background: var(--card-bg); font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; color: var(--ink); }
+  .nav-btn {
+    width: 44px; height: 44px; border-radius: 50%;
+    border: 2px solid var(--border); background: var(--card-bg);
+    font-size: 1.2rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s; color: var(--ink);
+  }
   .nav-btn:hover { border-color: var(--accent); color: var(--accent); }
   .card-counter { font-family: 'DM Mono', monospace; font-size: 0.8rem; color: var(--muted); min-width: 60px; text-align: center; }
-  .know-btn { padding: 10px 20px; border-radius: 20px; border: none; cursor: pointer; font-weight: 600; font-size: 0.83rem; transition: all 0.2s; }
+  .know-btn {
+    padding: 10px 20px; border-radius: 20px; border: none; cursor: pointer;
+    font-weight: 600; font-size: 0.83rem; transition: all 0.2s;
+  }
   .know-btn.yes { background: var(--green); color: white; }
   .know-btn.no { background: #e0d8cc; color: var(--ink); }
   .know-btn:hover { opacity: 0.85; transform: translateY(-1px); }
 
-  /* PRACTICE */
+  /* ── PRACTICE ── */
   .shuffle-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
   .shuffle-row h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; }
-  .icon-btn { padding: 8px 14px; border: 2px solid var(--border); background: var(--card-bg); border-radius: 8px; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; color: var(--muted); font-weight: 500; }
+  .icon-btn {
+    padding: 8px 14px; border: 2px solid var(--border);
+    background: var(--card-bg); border-radius: 8px;
+    font-size: 0.8rem; cursor: pointer; transition: all 0.2s;
+    color: var(--muted); font-weight: 500;
+  }
   .icon-btn:hover { border-color: var(--ink); color: var(--ink); }
-  .practice-card { background: var(--card-bg); border: 2px solid var(--border); border-radius: 16px; padding: 24px; box-shadow: var(--shadow); margin-bottom: 16px; }
+  .practice-card {
+    background: var(--card-bg); border: 2px solid var(--border);
+    border-radius: 16px; padding: 24px; box-shadow: var(--shadow); margin-bottom: 16px;
+  }
   .practice-expression { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
   .practice-meaning { font-size: 0.85rem; color: var(--muted); margin-bottom: 12px; }
   .pr-step-label { font-family: 'DM Mono', monospace; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 6px; }
@@ -112,26 +206,66 @@
   .pr-reveal-btn { background: none; border: 1px dashed var(--border); border-radius: 8px; padding: 6px 14px; font-size: 0.8rem; color: var(--muted); cursor: pointer; transition: all 0.2s; }
   .pr-reveal-btn:hover { border-color: var(--accent); color: var(--accent); }
   .pr-hint { font-size: 0.82rem; color: var(--green); background: #f0faf5; border-radius: 8px; padding: 10px 14px; margin-bottom: 10px; font-style: italic; line-height: 1.6; }
-  textarea { width: 100%; min-height: 80px; padding: 12px 14px; border: 2px solid var(--border); border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; background: white; color: var(--ink); resize: vertical; transition: border-color 0.2s; line-height: 1.6; }
+  textarea {
+    width: 100%; min-height: 80px; padding: 12px 14px;
+    border: 2px solid var(--border); border-radius: 10px;
+    font-family: 'DM Sans', sans-serif; font-size: 0.95rem;
+    background: white; color: var(--ink); resize: vertical;
+    transition: border-color 0.2s; line-height: 1.6;
+  }
   textarea:focus { outline: none; border-color: var(--accent); }
   textarea::placeholder { color: var(--muted); }
-  .submit-btn { margin-top: 10px; padding: 12px 24px; background: var(--ink); color: var(--paper); border: none; border-radius: 8px; font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 8px; }
+  .submit-btn {
+    margin-top: 10px; padding: 12px 24px;
+    background: var(--ink); color: var(--paper);
+    border: none; border-radius: 8px; font-weight: 600;
+    font-size: 0.88rem; cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; gap: 8px;
+  }
   .submit-btn:hover { background: var(--accent); }
   .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-  .feedback-box { margin-top: 14px; padding: 16px 18px; background: white; border-radius: 10px; border-left: 4px solid var(--accent); font-size: 0.86rem; line-height: 1.8; display: none; }
+  .feedback-box {
+    margin-top: 14px; padding: 16px 18px;
+    background: white; border-radius: 10px;
+    border-left: 4px solid var(--accent);
+    font-size: 0.86rem; line-height: 1.8; display: none;
+  }
   .feedback-box.visible { display: block; }
   .feedback-box .fb-label { font-family: 'DM Mono', monospace; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 8px; }
   .spinner { display: none; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* QUIZ */
+  /* ── TTS ── */
+  .tts-btn {
+    background: none; border: 2px solid var(--border); border-radius: 50%;
+    width: 38px; height: 38px; cursor: pointer; font-size: 1rem;
+    display: inline-flex; align-items: center; justify-content: center;
+    transition: all 0.2s; color: var(--muted); flex-shrink: 0;
+  }
+  .tts-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .tts-btn.speaking { border-color: var(--green); color: var(--green); animation: pulse-tts 1s ease-in-out infinite; }
+  @keyframes pulse-tts { 0%,100%{opacity:1} 50%{opacity:0.5} }
+  .card-example-row { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+  .fc-example-text { font-size: 0.8rem; color: var(--accent); font-style: italic; line-height: 1.5; flex: 1; }
+  .expr-example-row { display: flex; align-items: center; gap: 8px; }
+  .feedback-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+
+  /* ── QUIZ ── */
   .quiz-score { font-family: 'DM Mono', monospace; font-size: 0.8rem; color: var(--muted); margin-bottom: 14px; }
-  .quiz-prompt { background: var(--card-bg); border: 2px solid var(--border); border-radius: 16px; padding: 24px; margin-bottom: 16px; box-shadow: var(--shadow); }
+  .quiz-prompt {
+    background: var(--card-bg); border: 2px solid var(--border);
+    border-radius: 16px; padding: 24px; margin-bottom: 16px; box-shadow: var(--shadow);
+  }
   .quiz-q-label { font-family: 'DM Mono', monospace; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 10px; }
   .quiz-sentence { font-size: 1.05rem; line-height: 1.9; color: var(--ink); }
   .quiz-blank { display: inline-block; min-width: 130px; border-bottom: 3px solid var(--accent); color: transparent; background: rgba(194,68,14,0.06); border-radius: 4px; padding: 0 8px; }
   .choices { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
-  .choice-btn { padding: 12px 18px; border: 2px solid var(--border); background: var(--card-bg); border-radius: 10px; text-align: left; cursor: pointer; font-size: 0.88rem; font-family: 'DM Sans', sans-serif; transition: all 0.2s; color: var(--ink); }
+  .choice-btn {
+    padding: 12px 18px; border: 2px solid var(--border);
+    background: var(--card-bg); border-radius: 10px;
+    text-align: left; cursor: pointer; font-size: 0.88rem;
+    font-family: 'DM Sans', sans-serif; transition: all 0.2s; color: var(--ink);
+  }
   .choice-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
   .choice-btn.correct { border-color: var(--green); background: #f0faf5; color: var(--green); font-weight: 600; }
   .choice-btn.wrong { border-color: var(--accent); background: #fff5f0; color: var(--accent); }
@@ -145,12 +279,21 @@
   .next-btn.show { display: block; }
   .next-btn:hover { background: var(--accent); }
 
-  /* LIST */
-  .search-box { width: 100%; padding: 12px 14px; margin-bottom: 16px; border: 2px solid var(--border); border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 0.95rem; background: white; color: var(--ink); }
+  /* ── LIST ── */
+  .search-box {
+    width: 100%; padding: 12px 14px; margin-bottom: 16px;
+    border: 2px solid var(--border); border-radius: 10px;
+    font-family: 'DM Sans', sans-serif; font-size: 0.95rem;
+    background: white; color: var(--ink);
+  }
   .search-box:focus { outline: none; border-color: var(--accent); }
   .list-count { font-family: 'DM Mono', monospace; font-size: 0.76rem; color: var(--muted); margin-bottom: 12px; }
   .expression-list { display: flex; flex-direction: column; gap: 8px; }
-  .expr-item { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 14px 18px; cursor: pointer; transition: all 0.2s; }
+  .expr-item {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 12px; padding: 14px 18px;
+    cursor: pointer; transition: all 0.2s;
+  }
   .expr-item:hover, .expr-item.expanded { border-color: var(--accent); }
   .expr-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
   .expr-name { font-family: 'Playfair Display', serif; font-size: 0.95rem; font-weight: 700; color: var(--accent); flex-shrink: 0; }
@@ -161,119 +304,7 @@
   .dl { font-family: 'DM Mono', monospace; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); display: block; margin-bottom: 2px; }
   .example-text { color: var(--accent); font-style: italic; }
 
-  /* ═══════════════════════════════════════════
-     VIDEO LEARNING TAB
-  ═══════════════════════════════════════════ */
-  #video-panel { display: none; }
-  #video-panel.active { display: block; }
-
-  .vl-setup { background: var(--card-bg); border: 2px solid var(--border); border-radius: 16px; padding: 28px; box-shadow: var(--shadow); margin-bottom: 20px; }
-  .vl-setup h3 { font-family: 'Playfair Display', serif; font-size: 1.15rem; margin-bottom: 4px; }
-  .vl-setup p { font-size: 0.82rem; color: var(--muted); margin-bottom: 20px; line-height: 1.6; }
-  .vl-form-row { display: flex; gap: 10px; margin-bottom: 12px; }
-  .vl-input { flex: 1; padding: 11px 14px; border: 2px solid var(--border); border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; background: white; color: var(--ink); }
-  .vl-input:focus { outline: none; border-color: var(--accent); }
-  .vl-btn { padding: 11px 20px; background: var(--ink); color: var(--paper); border: none; border-radius: 10px; font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
-  .vl-btn:hover { background: var(--accent); }
-  .vl-btn.secondary { background: var(--card-bg); color: var(--ink); border: 2px solid var(--border); }
-  .vl-btn.secondary:hover { border-color: var(--accent); color: var(--accent); background: var(--card-bg); }
-  .vl-upload-label { display: flex; align-items: center; gap: 10px; padding: 11px 16px; border: 2px dashed var(--border); border-radius: 10px; cursor: pointer; font-size: 0.88rem; color: var(--muted); transition: all 0.2s; flex: 1; }
-  .vl-upload-label:hover { border-color: var(--accent); color: var(--accent); }
-  .vl-upload-label.has-file { border-color: var(--green); color: var(--green); border-style: solid; }
-  #srt-file-input { display: none; }
-  .vl-tip { font-size: 0.78rem; color: var(--muted); line-height: 1.6; background: var(--cream); border-radius: 8px; padding: 10px 14px; margin-top: 8px; }
-  .vl-tip a { color: var(--accent); }
-
-  /* Main player layout */
-  .vl-player-wrap { display: none; }
-  .vl-player-wrap.active { display: block; }
-  .vl-layout { display: grid; grid-template-columns: 1fr 340px; gap: 16px; align-items: start; }
-  @media (max-width: 760px) { .vl-layout { grid-template-columns: 1fr; } }
-
-  /* YouTube iframe */
-  .vl-video-col {}
-  .yt-frame-wrap { position: relative; padding-bottom: 56.25%; border-radius: 12px; overflow: hidden; background: #000; margin-bottom: 12px; }
-  .yt-frame-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
-
-  /* Video controls */
-  .vl-controls { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
-  .vl-ctrl-btn { padding: 7px 14px; border: 2px solid var(--border); background: var(--card-bg); border-radius: 8px; font-size: 0.8rem; cursor: pointer; transition: all 0.2s; color: var(--muted); display: flex; align-items: center; gap: 5px; }
-  .vl-ctrl-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .vl-ctrl-btn.active { border-color: var(--accent); color: var(--accent); background: #fff5f0; }
-  .vl-speed-select { padding: 7px 10px; border: 2px solid var(--border); border-radius: 8px; font-size: 0.8rem; background: var(--card-bg); color: var(--muted); cursor: pointer; font-family: 'DM Sans', sans-serif; }
-  .vl-speed-select:focus { outline: none; border-color: var(--accent); }
-  .repeat-badge { font-family: 'DM Mono', monospace; font-size: 0.72rem; background: var(--accent); color: white; border-radius: 10px; padding: 2px 8px; }
-
-  /* Subtitle panel */
-  .vl-sub-col {}
-  .vl-sub-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-  .vl-sub-title { font-family: 'DM Mono', monospace; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
-  .vl-sub-actions { display: flex; gap: 6px; }
-  .vl-mini-btn { padding: 4px 10px; border: 1px solid var(--border); background: var(--card-bg); border-radius: 6px; font-size: 0.73rem; cursor: pointer; color: var(--muted); transition: all 0.2s; }
-  .vl-mini-btn:hover { border-color: var(--accent); color: var(--accent); }
-
-  .vl-sub-list { height: 480px; overflow-y: auto; border: 2px solid var(--border); border-radius: 12px; background: white; scroll-behavior: smooth; }
-  .vl-sub-list::-webkit-scrollbar { width: 4px; }
-  .vl-sub-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-  .sub-line { padding: 10px 14px; border-bottom: 1px solid #f0ece4; cursor: pointer; transition: background 0.15s; position: relative; }
-  .sub-line:last-child { border-bottom: none; }
-  .sub-line:hover { background: var(--cream); }
-  .sub-line.active-line { background: #fff5f0; border-left: 3px solid var(--accent); }
-  .sub-time { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--muted); margin-bottom: 3px; }
-  .sub-text { font-size: 0.88rem; line-height: 1.6; color: var(--ink); }
-  .sub-star { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; font-size: 1rem; cursor: pointer; color: var(--border); transition: color 0.2s; padding: 4px; }
-  .sub-star:hover, .sub-star.starred { color: var(--gold); }
-  .sub-word { cursor: pointer; border-radius: 3px; transition: background 0.15s; padding: 1px 2px; display: inline; }
-  .sub-word:hover { background: rgba(194,68,14,0.12); color: var(--accent); }
-
-  /* Word popup */
-  .word-popup { position: fixed; z-index: 500; background: var(--ink); color: var(--paper); border-radius: 12px; padding: 16px 18px; max-width: 280px; min-width: 200px; box-shadow: 0 8px 32px rgba(0,0,0,0.35); font-size: 0.84rem; line-height: 1.6; display: none; }
-  .word-popup.visible { display: block; }
-  .wp-word { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: var(--accent); margin-bottom: 6px; }
-  .wp-pos { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: #888; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
-  .wp-meaning { margin-bottom: 8px; }
-  .wp-example { font-style: italic; color: #ccc; font-size: 0.8rem; margin-bottom: 12px; }
-  .wp-loading { color: #888; font-size: 0.82rem; }
-  .wp-save-btn { width: 100%; padding: 8px; background: var(--accent); color: white; border: none; border-radius: 7px; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
-  .wp-save-btn:hover { background: #a33a0c; }
-  .wp-save-btn.saved { background: var(--green); cursor: default; }
-  .wp-close { position: absolute; top: 8px; right: 10px; background: none; border: none; color: #888; cursor: pointer; font-size: 0.9rem; }
-
-  /* Saved items panel */
-  .vl-saved-section { margin-top: 20px; }
-  .vl-saved-tabs { display: flex; gap: 8px; margin-bottom: 14px; }
-  .vl-saved-tab { padding: 7px 16px; border: 2px solid var(--border); background: var(--card-bg); border-radius: 20px; font-size: 0.8rem; cursor: pointer; color: var(--muted); transition: all 0.2s; }
-  .vl-saved-tab.active { border-color: var(--accent); color: var(--accent); background: #fff5f0; }
-  .saved-list { display: flex; flex-direction: column; gap: 8px; }
-  .saved-word-item { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
-  .swi-word { font-family: 'Playfair Display', serif; font-size: 0.95rem; font-weight: 700; color: var(--accent); }
-  .swi-meaning { font-size: 0.82rem; color: var(--muted); margin-top: 2px; }
-  .swi-delete { background: none; border: none; color: var(--border); cursor: pointer; font-size: 0.85rem; transition: color 0.2s; flex-shrink: 0; }
-  .swi-delete:hover { color: var(--accent); }
-  .saved-sent-item { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; }
-  .ssi-text { font-size: 0.88rem; line-height: 1.6; color: var(--ink); margin-bottom: 6px; }
-  .ssi-time { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--muted); }
-  .ssi-delete { background: none; border: none; color: var(--border); cursor: pointer; font-size: 0.85rem; float: right; transition: color 0.2s; }
-  .ssi-delete:hover { color: var(--accent); }
-  .empty-state { text-align: center; padding: 32px; color: var(--muted); font-size: 0.85rem; }
-
-  /* Video Review Quiz */
-  .vl-quiz-section { margin-top: 20px; background: var(--card-bg); border: 2px solid var(--border); border-radius: 16px; padding: 24px; }
-  .vl-quiz-section h4 { font-family: 'Playfair Display', serif; font-size: 1.05rem; margin-bottom: 4px; }
-  .vl-quiz-section p { font-size: 0.82rem; color: var(--muted); margin-bottom: 16px; }
-  .vl-quiz-start-btn { padding: 11px 24px; background: var(--ink); color: var(--paper); border: none; border-radius: 8px; font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: all 0.2s; }
-  .vl-quiz-start-btn:hover { background: var(--accent); }
-  .vl-quiz-inner { display: none; }
-  .vl-quiz-inner.active { display: block; }
-  .vl-quiz-q { background: white; border-radius: 10px; padding: 16px; margin-bottom: 14px; font-size: 0.9rem; line-height: 1.7; border-left: 4px solid var(--accent); }
-  .vl-quiz-ans { width: 100%; padding: 10px 14px; border: 2px solid var(--border); border-radius: 8px; font-size: 0.88rem; font-family: 'DM Sans', sans-serif; background: white; color: var(--ink); margin-bottom: 10px; }
-  .vl-quiz-ans:focus { outline: none; border-color: var(--accent); }
-  .vl-quiz-submit { padding: 10px 20px; background: var(--ink); color: var(--paper); border: none; border-radius: 8px; font-weight: 600; font-size: 0.86rem; cursor: pointer; display: flex; align-items: center; gap: 8px; }
-  .vl-quiz-submit:hover { background: var(--accent); }
-  .vl-quiz-fb { margin-top: 12px; padding: 14px; border-radius: 10px; background: white; border-left: 4px solid var(--accent); font-size: 0.84rem; line-height: 1.7; display: none; }
-  .vl-quiz-fb.show { display: block; }
-  .vl-quiz-progress { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--muted); margin-bottom: 12px; }
-
+  /* ── LAST UPDATED ── */
   .last-updated { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--muted); text-align: center; padding: 16px; }
 
   @media (max-width: 500px) {
@@ -282,7 +313,6 @@
     .stats-bar { display: none; }
     main { padding: 16px 10px; }
     .card-expression { font-size: 1.3rem; }
-    .vl-form-row { flex-direction: column; }
   }
 </style>
 </head>
@@ -309,16 +339,6 @@
   </div>
 </div>
 
-<!-- Word popup -->
-<div class="word-popup" id="word-popup">
-  <button class="wp-close" onclick="closeWordPopup()">✕</button>
-  <div class="wp-word" id="wp-word"></div>
-  <div class="wp-pos" id="wp-pos"></div>
-  <div class="wp-meaning" id="wp-meaning"></div>
-  <div class="wp-example" id="wp-example"></div>
-  <button class="wp-save-btn" id="wp-save-btn" onclick="saveWordFromPopup()">+ 단어장에 저장</button>
-</div>
-
 <header>
   <h1>Mindy's <span>Expression Trainer</span></h1>
   <div style="display:flex;align-items:center;gap:12px">
@@ -335,7 +355,6 @@
   <button class="tab-btn" data-tab="practice">✍️ 문장 만들기</button>
   <button class="tab-btn" data-tab="quiz">🎯 빈칸 퀴즈</button>
   <button class="tab-btn" data-tab="list">📋 전체 목록</button>
-  <button class="tab-btn" data-tab="video-panel">🎬 비디오 학습</button>
 </nav>
 
 <main>
@@ -360,7 +379,10 @@
           <div class="card-label">뜻 &amp; 뉘앙스</div>
           <div class="card-meaning" id="fc-meaning">—</div>
           <div class="card-nuance" id="fc-nuance"></div>
-          <div class="card-example" id="fc-example"></div>
+          <div class="card-example-row">
+            <span class="fc-example-text" id="fc-example"></span>
+            <button class="tts-btn" id="fc-tts-btn" onclick="speakText('fc-example', 'fc-tts-btn')" title="듣기">🔊</button>
+          </div>
         </div>
       </div>
     </div>
@@ -397,8 +419,12 @@
         <div class="spinner" id="pr-spinner"></div>
       </button>
       <div class="feedback-box" id="pr-feedback">
-        <div class="fb-label">AI 피드백</div>
+        <div class="feedback-header">
+          <div class="fb-label">AI 피드백</div>
+          <button class="tts-btn" id="pr-tts-btn" onclick="speakText('pr-model-sentence', 'pr-tts-btn')" title="모범 번역 듣기" style="display:none">🔊</button>
+        </div>
         <div id="pr-feedback-text"></div>
+        <div id="pr-model-sentence" style="display:none"></div>
       </div>
     </div>
   </div>
@@ -424,165 +450,62 @@
     <div class="expression-list" id="expression-list"></div>
   </div>
 
-  <!-- ═══════════ VIDEO LEARNING ═══════════ -->
-  <div id="video-panel" class="panel">
-
-    <!-- SETUP CARD -->
-    <div class="vl-setup" id="vl-setup">
-      <h3>🎬 비디오 학습</h3>
-      <p>유튜브 URL과 자막 파일(SRT/VTT)을 올려주세요. 자막에서 단어 팝업, 구간 반복, 단어/문장 저장이 가능해요.</p>
-
-      <div class="vl-form-row">
-        <input class="vl-input" id="yt-url-input" type="text" placeholder="유튜브 URL (예: https://www.youtube.com/watch?v=...)">
-        <button class="vl-btn" onclick="loadVideo()">▶ 불러오기</button>
-      </div>
-      <div class="vl-form-row">
-        <label class="vl-upload-label" id="srt-label" for="srt-file-input">
-          <span>📄</span> <span id="srt-label-text">SRT 또는 VTT 자막 파일 선택</span>
-        </label>
-        <input type="file" id="srt-file-input" accept=".srt,.vtt" onchange="handleSrtUpload(this)">
-      </div>
-      <div class="vl-tip">
-        💡 <b>자막 파일 받는 법:</b> <a href="https://downsub.com" target="_blank">DownSub.com</a>에서 유튜브 URL 입력 → SRT 다운로드 (무료)
-      </div>
-    </div>
-
-    <!-- PLAYER + SUBTITLE -->
-    <div class="vl-player-wrap" id="vl-player-wrap">
-
-      <!-- Top: change video button -->
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-        <span style="font-family:'Playfair Display',serif;font-size:1.05rem;" id="vl-video-title">비디오 학습</span>
-        <button class="vl-btn secondary" onclick="resetVideo()" style="font-size:0.8rem;padding:7px 14px;">↩ 다른 영상</button>
-      </div>
-
-      <div class="vl-layout">
-        <!-- LEFT: video + controls -->
-        <div class="vl-video-col">
-          <div class="yt-frame-wrap">
-            <iframe id="yt-iframe" allowfullscreen allow="autoplay"></iframe>
-          </div>
-          <div class="vl-controls">
-            <button class="vl-ctrl-btn" id="repeat-btn" onclick="toggleRepeat()">🔁 구간 반복 <span class="repeat-badge" id="repeat-badge" style="display:none">ON</span></button>
-            <select class="vl-speed-select" id="speed-select" onchange="changeSpeed(this.value)" title="재생 속도">
-              <option value="0.5">0.5×</option>
-              <option value="0.75">0.75×</option>
-              <option value="1" selected>1.0×</option>
-              <option value="1.25">1.25×</option>
-              <option value="1.5">1.5×</option>
-            </select>
-            <button class="vl-ctrl-btn" onclick="replayCurrent()">↩ 현재 문장 반복</button>
-          </div>
-          <div style="font-size:0.78rem;color:var(--muted);line-height:1.6;background:var(--cream);border-radius:8px;padding:10px 14px;">
-            💡 <b>구간 반복 ON</b>: 자막 패널에서 문장을 클릭하면 해당 구간만 계속 반복해요. 다시 클릭하면 해제.
-          </div>
-        </div>
-
-        <!-- RIGHT: subtitle panel -->
-        <div class="vl-sub-col">
-          <div class="vl-sub-header">
-            <span class="vl-sub-title">자막 — <span id="sub-count">0</span>줄</span>
-            <div class="vl-sub-actions">
-              <button class="vl-mini-btn" onclick="toggleAutoScroll()">📍 자동스크롤 <span id="autoscroll-badge">ON</span></button>
-            </div>
-          </div>
-          <div class="vl-sub-list" id="vl-sub-list">
-            <div class="empty-state">자막 파일을 업로드하면<br>여기에 표시돼요</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- SAVED SECTION -->
-      <div class="vl-saved-section">
-        <div class="vl-saved-tabs">
-          <button class="vl-saved-tab active" data-sv="words" onclick="switchSavedTab('words')">📖 저장된 단어 <span id="saved-words-count" style="font-family:'DM Mono',monospace;font-size:0.7rem"></span></button>
-          <button class="vl-saved-tab" data-sv="sents" onclick="switchSavedTab('sents')">⭐ 저장된 문장 <span id="saved-sents-count" style="font-family:'DM Mono',monospace;font-size:0.7rem"></span></button>
-        </div>
-        <div class="saved-list" id="saved-words-list"></div>
-        <div class="saved-list" id="saved-sents-list" style="display:none"></div>
-      </div>
-
-      <!-- VIDEO QUIZ -->
-      <div class="vl-quiz-section">
-        <h4>🎯 저장 단어/문장 복습 테스트</h4>
-        <p>저장된 단어와 문장을 기반으로 AI가 퀴즈를 만들어 드려요.</p>
-        <div id="vl-quiz-start-wrap">
-          <button class="vl-quiz-start-btn" onclick="startVideoQuiz()">테스트 시작</button>
-        </div>
-        <div class="vl-quiz-inner" id="vl-quiz-inner">
-          <div class="vl-quiz-progress" id="vl-quiz-progress"></div>
-          <div class="vl-quiz-q" id="vl-quiz-q"></div>
-          <input class="vl-quiz-ans" id="vl-quiz-ans" type="text" placeholder="답을 입력하세요...">
-          <button class="vl-quiz-submit" id="vl-quiz-submit-btn" onclick="submitVideoQuiz()">
-            <span>제출</span>
-            <div class="spinner" id="vl-quiz-spinner"></div>
-          </button>
-          <div class="vl-quiz-fb" id="vl-quiz-fb"></div>
-          <div style="margin-top:10px;display:flex;gap:8px;">
-            <button class="vl-ctrl-btn" id="vl-quiz-next-btn" onclick="nextVideoQuiz()" style="display:none">다음 문제 →</button>
-            <button class="vl-ctrl-btn" onclick="startVideoQuiz()">🔀 새로 시작</button>
-          </div>
-        </div>
-      </div>
-
-    </div><!-- /vl-player-wrap -->
-  </div><!-- /video-panel -->
-
 </main>
 <div class="last-updated" id="last-updated"></div>
 
 <script>
-// ─── CONFIG ──────────────────────────────────────────────
+// ─── CONFIG ─────────────────────────────────────────────
 const SHEET_ID = '1BLJ9o0-jxc4nlSSd2lvRn2_RMNIdrsbwZasYfqkzti0';
-const SHEETS = [{ name: 'Class', src: 'class' }, { name: 'Video', src: 'video' }];
+const SHEETS = [
+  { name: 'Class', src: 'class' },
+  { name: 'Video', src: 'video' },
+];
 const CACHE_KEY = 'expressionData_v2';
 const CACHE_TIME_KEY = 'expressionDataTime_v2';
-const CACHE_TTL = 60 * 60 * 1000;
+const CACHE_TTL = 60 * 60 * 1000; // 1 hour
 
-// ─── STATE ───────────────────────────────────────────────
+// ─── STATE ──────────────────────────────────────────────
 let data = [];
 let known = new Set(JSON.parse(localStorage.getItem('knownExpressions') || '[]'));
 let fcDeck = [], fcIndex = 0, fcMode = 'all';
-let prCurrent = null, prKoreanSentence = '', prHintSentence = '', hintVisible = false;
+let prCurrent = null;
 let quizScore = 0, quizTotal = 0, quizCurrent = null, quizAnswered = false;
-
-// ─── VIDEO STATE ─────────────────────────────────────────
-let ytPlayer = null;
-let subtitles = []; // [{start, end, text}]
-let currentSubIndex = -1;
-let repeatMode = false;
-let repeatStart = null, repeatEnd = null;
-let autoScroll = true;
-let playerReady = false;
-let syncInterval = null;
-let savedWords = JSON.parse(localStorage.getItem('vl_savedWords') || '[]'); // [{word, meaning, pos, example}]
-let savedSents = JSON.parse(localStorage.getItem('vl_savedSents') || '[]'); // [{text, time}]
-let currentWordForPopup = null;
-let popupWord = '';
-let vlQuizItems = [], vlQuizIndex = 0;
 
 // ─── LOAD DATA ───────────────────────────────────────────
 async function loadData(forceRefresh = false) {
   const syncBtn = document.getElementById('sync-btn');
-  syncBtn.classList.add('syncing'); syncBtn.textContent = '↻ 로딩중...';
-  setLoadBar(10); showLoadError(false);
+  syncBtn.classList.add('syncing');
+  syncBtn.textContent = '↻ 로딩중...';
+
+  setLoadBar(10);
+  showLoadError(false);
+
+  // Check cache
   if (!forceRefresh) {
     const cached = localStorage.getItem(CACHE_KEY);
     const cachedTime = localStorage.getItem(CACHE_TIME_KEY);
     if (cached && cachedTime && (Date.now() - parseInt(cachedTime)) < CACHE_TTL) {
-      data = JSON.parse(cached); onDataLoaded(); setLoadBar(100); setTimeout(hideLoading, 400);
-      syncBtn.classList.remove('syncing'); syncBtn.textContent = '↻ 동기화'; return;
+      data = JSON.parse(cached);
+      onDataLoaded();
+      setLoadBar(100);
+      setTimeout(hideLoading, 400);
+      syncBtn.classList.remove('syncing');
+      syncBtn.textContent = '↻ 동기화';
+      return;
     }
   }
+
   try {
     const allRows = [];
     for (let i = 0; i < SHEETS.length; i++) {
-      const sheet = SHEETS[i]; setLoadBar(20 + i * 35);
+      const sheet = SHEETS[i];
+      setLoadBar(20 + i * 35);
       const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&sheet=${encodeURIComponent(sheet.name)}`;
       const res = await fetch(url);
       if (!res.ok) throw new Error(`시트 로드 실패: ${sheet.name}`);
       const csv = await res.text();
       const rows = parseCSV(csv);
+      // Find header row
       const headerIdx = rows.findIndex(r => r.some(c => c.includes('표현') || c.toLowerCase().includes('expression')));
       if (headerIdx === -1) continue;
       const headers = rows[headerIdx].map(h => h.trim().toLowerCase());
@@ -591,46 +514,95 @@ async function loadData(forceRefresh = false) {
       const nIdx = headers.findIndex(h => h.includes('뉘앙스') || h.includes('nuance'));
       const exIdx = headers.findIndex(h => h.includes('예문') || h.includes('example'));
       for (let r = headerIdx + 1; r < rows.length; r++) {
-        const row = rows[r]; const expr = eIdx >= 0 ? row[eIdx]?.trim() : '';
+        const row = rows[r];
+        const expr = eIdx >= 0 ? row[eIdx]?.trim() : '';
         if (!expr) continue;
-        allRows.push({ e: expr, m: mIdx >= 0 ? row[mIdx]?.trim() || '' : '', n: nIdx >= 0 ? row[nIdx]?.trim() || '' : '', ex: exIdx >= 0 ? row[exIdx]?.trim() || '' : '', src: sheet.src });
+        allRows.push({
+          e: expr,
+          m: mIdx >= 0 ? row[mIdx]?.trim() || '' : '',
+          n: nIdx >= 0 ? row[nIdx]?.trim() || '' : '',
+          ex: exIdx >= 0 ? row[exIdx]?.trim() || '' : '',
+          src: sheet.src
+        });
       }
     }
+
+    // Deduplicate
     const seen = new Set();
-    data = allRows.filter(d => { if (!d.e || seen.has(d.e)) return false; seen.add(d.e); return true; });
+    data = allRows.filter(d => { if(!d.e || seen.has(d.e)) return false; seen.add(d.e); return true; });
+
     localStorage.setItem(CACHE_KEY, JSON.stringify(data));
     localStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
-    setLoadBar(100); onDataLoaded(); setTimeout(hideLoading, 400);
+
+    setLoadBar(100);
+    onDataLoaded();
+    setTimeout(hideLoading, 400);
+
     const now = new Date();
-    document.getElementById('last-updated').textContent = `마지막 동기화: ${now.toLocaleDateString('ko-KR')} ${now.toLocaleTimeString('ko-KR', {hour:'2-digit',minute:'2-digit'})}`;
+    document.getElementById('last-updated').textContent =
+      `마지막 동기화: ${now.toLocaleDateString('ko-KR')} ${now.toLocaleTimeString('ko-KR', {hour:'2-digit',minute:'2-digit'})}`;
+
   } catch(err) {
+    // Try cache fallback
     const cached = localStorage.getItem(CACHE_KEY);
-    if (cached) { data = JSON.parse(cached); onDataLoaded(); hideLoading(); document.getElementById('last-updated').textContent = '⚠️ 오프라인 — 캐시 데이터 사용 중'; }
-    else showLoadError('Google Sheets에 연결할 수 없어요.\n\n(' + err.message + ')');
+    if (cached) {
+      data = JSON.parse(cached);
+      onDataLoaded();
+      hideLoading();
+      document.getElementById('last-updated').textContent = '⚠️ 오프라인 — 캐시 데이터 사용 중';
+    } else {
+      showLoadError('Google Sheets에 연결할 수 없어요.\n\n시트가 "링크가 있는 모든 사용자" 공개로 설정되어 있는지 확인해주세요.\n\n(' + err.message + ')');
+    }
   }
-  syncBtn.classList.remove('syncing'); syncBtn.textContent = '↻ 동기화';
+
+  syncBtn.classList.remove('syncing');
+  syncBtn.textContent = '↻ 동기화';
 }
 
-function onDataLoaded() { updateStats(); buildDeck(); shufflePractice(); renderList(''); initQuiz(); }
-function setLoadBar(pct) { document.getElementById('load-bar').style.width = pct + '%'; }
-function hideLoading() { document.getElementById('loading-screen').classList.add('hidden'); setTimeout(() => document.getElementById('loading-screen').style.display = 'none', 500); }
-function showLoadError(msg) {
-  const el = document.getElementById('load-error'); const btn = document.getElementById('retry-btn');
-  if (msg) { el.textContent = msg; el.style.display = 'block'; btn.style.display = 'block'; }
-  else { el.style.display = 'none'; btn.style.display = 'none'; }
+function onDataLoaded() {
+  updateStats();
+  buildDeck();
+  shufflePractice();
+  renderList('');
+  initQuiz();
 }
+
+function setLoadBar(pct) {
+  document.getElementById('load-bar').style.width = pct + '%';
+}
+function hideLoading() {
+  document.getElementById('loading-screen').classList.add('hidden');
+  setTimeout(() => document.getElementById('loading-screen').style.display = 'none', 500);
+}
+function showLoadError(msg) {
+  const el = document.getElementById('load-error');
+  const btn = document.getElementById('retry-btn');
+  if (msg) {
+    el.textContent = msg; el.style.display = 'block'; btn.style.display = 'block';
+  } else {
+    el.style.display = 'none'; btn.style.display = 'none';
+  }
+}
+
+// ─── CSV PARSER ──────────────────────────────────────────
 function parseCSV(text) {
-  const rows = []; const lines = text.split('\n');
+  const rows = [];
+  const lines = text.split('\n');
   for (const line of lines) {
     if (!line.trim()) continue;
-    const cells = []; let cur = '', inQ = false;
+    const cells = [];
+    let cur = '', inQ = false;
     for (let i = 0; i < line.length; i++) {
       const c = line[i];
-      if (c === '"') { if (inQ && line[i+1] === '"') { cur += '"'; i++; } else inQ = !inQ; }
-      else if (c === ',' && !inQ) { cells.push(cur); cur = ''; }
-      else cur += c;
+      if (c === '"') {
+        if (inQ && line[i+1] === '"') { cur += '"'; i++; }
+        else inQ = !inQ;
+      } else if (c === ',' && !inQ) {
+        cells.push(cur); cur = '';
+      } else cur += c;
     }
-    cells.push(cur); rows.push(cells);
+    cells.push(cur);
+    rows.push(cells);
   }
   return rows;
 }
@@ -646,10 +618,13 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
     if(btn.dataset.tab === 'list') renderList(document.querySelector('.search-box')?.value || '');
   });
 });
+
 document.querySelectorAll('.mode-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active'); fcMode = btn.dataset.mode; buildDeck();
+    btn.classList.add('active');
+    fcMode = btn.dataset.mode;
+    buildDeck();
   });
 });
 
@@ -659,609 +634,387 @@ function buildDeck() {
   if(fcMode === 'unknown') pool = data.filter(d => !known.has(d.e));
   else if(fcMode === 'class') pool = data.filter(d => d.src === 'class');
   else if(fcMode === 'video') pool = data.filter(d => d.src === 'video');
-  fcDeck = shuffle([...pool]); fcIndex = 0;
+  fcDeck = shuffle([...pool]);
+  fcIndex = 0;
   const card = document.getElementById('flashcard-card');
   if(card) card.classList.remove('flipped');
   renderCard();
 }
+
 function renderCard() {
-  if(!fcDeck.length) { document.getElementById('fc-expr').textContent = '카드가 없어요'; document.getElementById('fc-meaning').textContent = ''; document.getElementById('fc-counter').textContent = '0 / 0'; return; }
+  if(window.speechSynthesis) window.speechSynthesis.cancel();
+  if(!fcDeck.length) {
+    document.getElementById('fc-expr').textContent = '카드가 없어요';
+    document.getElementById('fc-meaning').textContent = '';
+    document.getElementById('fc-counter').textContent = '0 / 0';
+    return;
+  }
   const d = fcDeck[fcIndex];
   document.getElementById('fc-expr').textContent = d.e;
   document.getElementById('fc-hint').textContent = known.has(d.e) ? '✓ 학습완료' : '';
   document.getElementById('fc-meaning').textContent = d.m;
   document.getElementById('fc-nuance').textContent = d.n;
-  document.getElementById('fc-example').textContent = d.ex ? '"' + d.ex + '"' : '';
+  document.getElementById('fc-example').textContent = d.ex ? d.ex : '';
+  // Show/hide TTS button based on whether example exists
+  const ttsBtn = document.getElementById('fc-tts-btn');
+  if(ttsBtn) ttsBtn.style.display = d.ex ? 'inline-flex' : 'none';
   document.getElementById('fc-counter').textContent = (fcIndex+1) + ' / ' + fcDeck.length;
   document.getElementById('fc-progress').style.width = ((fcIndex+1)/fcDeck.length*100) + '%';
   document.getElementById('flashcard-card').classList.remove('flipped');
 }
+
 function flipCard() { document.getElementById('flashcard-card').classList.toggle('flipped'); }
 function nextCard() { if(!fcDeck.length) return; fcIndex = (fcIndex+1) % fcDeck.length; renderCard(); }
 function prevCard() { if(!fcDeck.length) return; fcIndex = (fcIndex-1+fcDeck.length) % fcDeck.length; renderCard(); }
 function markCard(isKnown) {
   if(!fcDeck.length) return;
   if(isKnown) known.add(fcDeck[fcIndex].e); else known.delete(fcDeck[fcIndex].e);
-  localStorage.setItem('knownExpressions', JSON.stringify([...known])); updateStats(); nextCard();
+  localStorage.setItem('knownExpressions', JSON.stringify([...known]));
+  updateStats();
+  nextCard();
 }
 
 // ─── PRACTICE ────────────────────────────────────────────
+let prKoreanSentence = '';
+let prHintSentence = '';
+let hintVisible = false;
+
 function toggleHint() {
   hintVisible = !hintVisible;
   document.getElementById('pr-hint').style.display = hintVisible ? 'block' : 'none';
   document.getElementById('pr-reveal-btn').textContent = hintVisible ? '💡 힌트 숨기기' : '💡 힌트 보기';
 }
+
 async function shufflePractice() {
   if(!data.length) return;
   const pool = data.filter(d => d.m);
   prCurrent = pool[Math.floor(Math.random() * pool.length)];
-  prKoreanSentence = ''; prHintSentence = ''; hintVisible = false;
+  prKoreanSentence = '';
+  prHintSentence = '';
+  hintVisible = false;
+
   document.getElementById('pr-expr').textContent = prCurrent.e;
   document.getElementById('pr-meaning').textContent = prCurrent.m;
   document.getElementById('pr-korean').textContent = '문장 생성 중...';
   document.getElementById('pr-hint').style.display = 'none';
   document.getElementById('pr-hint').textContent = '';
   document.getElementById('pr-reveal-btn').textContent = '💡 힌트 보기';
-  const inp = document.getElementById('pr-input'); if(inp) inp.value = '';
-  const fb = document.getElementById('pr-feedback'); if(fb) fb.classList.remove('visible');
-  const btn = document.getElementById('pr-submit'); if(btn) btn.disabled = false;
+  const inp = document.getElementById('pr-input');
+  if(inp) inp.value = '';
+  const fb = document.getElementById('pr-feedback');
+  if(fb) fb.classList.remove('visible');
+  const btn = document.getElementById('pr-submit');
+  if(btn) btn.disabled = false;
+
   const apiKey = localStorage.getItem('geminiApiKey');
-  if(!apiKey) { document.getElementById('pr-korean').textContent = '(API 키를 설정하면 한국어 문장이 자동 생성돼요)'; return; }
+  if(!apiKey) {
+    document.getElementById('pr-korean').textContent = '(API 키를 설정하면 한국어 문장이 자동 생성돼요)';
+    return;
+  }
+
   try {
-    const prompt = `당신은 영어 선생님입니다. 아래 영어 표현을 활용할 수 있는 완전한 한국어 문장을 1개 만들어주세요.\n영어 표현: "${prCurrent.e}"\n한국어 뜻: "${prCurrent.m}"\n조건:\n- 반드시 완전한 문장(주어 + 서술어)으로 작성\n- ESG, 기업지배구조, 투자, 주주활동 맥락 우선\n- 문장 끝에 마침표 포함\n- 한국어 문장만 출력, 다른 설명 없음`;
-    const res = await geminiCall(prompt, 200);
-    prKoreanSentence = res;
+    const prompt = `당신은 영어 선생님입니다. 아래 영어 표현을 활용할 수 있는 완전한 한국어 문장을 1개 만들어주세요.
+
+영어 표현: "${prCurrent.e}"
+한국어 뜻: "${prCurrent.m}"
+
+조건:
+- 반드시 완전한 문장(주어 + 서술어)으로 작성
+- ESG, 기업지배구조, 투자, 주주활동 맥락 우선
+- 문장 끝에 마침표 포함
+- 한국어 문장만 출력, 다른 설명 없음
+- 예시: "NPS는 이번 주주총회에서 반대표를 던지며 시장에 강한 신뢰의 메시지를 보냈다."`;
+
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: { maxOutputTokens: 200 }
+        })
+      }
+    );
+    const json = await res.json();
+    if(json.error) throw new Error(json.error.message);
+    prKoreanSentence = json.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '';
     document.getElementById('pr-korean').textContent = prKoreanSentence;
-    const hintRes = await geminiCall(`Translate this Korean sentence to English using the expression "${prCurrent.e}": "${prKoreanSentence}"\nOutput ONLY the English sentence, nothing else.`, 200);
-    prHintSentence = hintRes;
+
+    // Also pre-generate hint
+    const hintPrompt = `Translate this Korean sentence to English using the expression "${prCurrent.e}": "${prKoreanSentence}"
+Output ONLY the English sentence, nothing else.`;
+    const hintRes = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: hintPrompt }] }],
+          generationConfig: { maxOutputTokens: 200 }
+        })
+      }
+    );
+    const hintJson = await hintRes.json();
+    prHintSentence = hintJson.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '';
     document.getElementById('pr-hint').textContent = '모범 번역: ' + prHintSentence;
-  } catch(e) { document.getElementById('pr-korean').textContent = '(문장 생성 실패 — 다시 시도해주세요)'; }
+
+  } catch(e) {
+    document.getElementById('pr-korean').textContent = '(문장 생성 실패 — 다시 시도해주세요)';
+  }
 }
+
 async function submitPractice() {
   const sentence = document.getElementById('pr-input').value.trim();
   if(!sentence || !prCurrent) return;
+
   const apiKey = localStorage.getItem('geminiApiKey');
-  if(!apiKey) { showApiKeyModal(); return; }
-  const btn = document.getElementById('pr-submit'); const spinner = document.getElementById('pr-spinner');
-  btn.disabled = true; spinner.style.display = 'block';
-  const prompt = `You are an English tutor helping a Korean ESG/investment professional practice English translation.\nTask: She was asked to translate this Korean sentence into English using the expression "${prCurrent.e}".\nKorean sentence to translate: "${prKoreanSentence}"\nTarget expression: "${prCurrent.e}" (Korean: ${prCurrent.m})\n${prCurrent.n ? 'Usage notes: ' + prCurrent.n : ''}\n${prHintSentence ? 'Reference translation: "' + prHintSentence + '"' : ''}\nHer translation: "${sentence}"\nGive feedback in Korean with these sections:\n1. **표현 사용** — Did she use "${prCurrent.e}" correctly? (✅ or ⚠️ with brief explanation)\n2. **잘한 점** — What is good about her translation\n3. **개선 포인트** — One specific improvement (grammar, word choice, naturalness)\n4. **모범 번역** — Show an ideal translation of the Korean sentence\nBe specific, encouraging, and concise.`;
+  if(!apiKey) {
+    showApiKeyModal();
+    return;
+  }
+
+  const btn = document.getElementById('pr-submit');
+  const spinner = document.getElementById('pr-spinner');
+  btn.disabled = true;
+  spinner.style.display = 'block';
+
+  const prompt = `You are an English tutor helping a Korean ESG/investment professional practice English translation.
+
+Task: She was asked to translate this Korean sentence into English using the expression "${prCurrent.e}".
+
+Korean sentence to translate: "${prKoreanSentence}"
+Target expression: "${prCurrent.e}" (Korean: ${prCurrent.m})
+${prCurrent.n ? 'Usage notes: ' + prCurrent.n : ''}
+${prHintSentence ? 'Reference translation: "' + prHintSentence + '"' : ''}
+
+Her translation: "${sentence}"
+
+Give feedback in Korean with these sections:
+1. **표현 사용** — Did she use "${prCurrent.e}" correctly? (✅ or ⚠️ with brief explanation)
+2. **잘한 점** — What is good about her translation
+3. **개선 포인트** — One specific improvement (grammar, word choice, naturalness)
+4. **모범 번역** — Show an ideal translation of the Korean sentence
+
+Be specific, encouraging, and concise.`;
+
   try {
-    const text = await geminiCall(prompt, 1000);
-    document.getElementById('pr-feedback-text').innerHTML = text.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<b>$1</b>');
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: { maxOutputTokens: 1000 }
+        })
+      }
+    );
+    const json = await res.json();
+    if(json.error) throw new Error(json.error.message);
+    const text = json.candidates?.[0]?.content?.parts?.[0]?.text || '피드백을 받아오지 못했어요.';
+    document.getElementById('pr-feedback-text').innerHTML = text.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+
+    // Extract model translation for TTS (look for text after 모범 번역)
+    const modelMatch = text.match(/모범\s*번역[^"]*[""]([^""]+)[""]/);
+    const modelSentenceEl = document.getElementById('pr-model-sentence');
+    const ttsBtnEl = document.getElementById('pr-tts-btn');
+    if(modelMatch && modelSentenceEl) {
+      modelSentenceEl.textContent = modelMatch[1].trim();
+      if(ttsBtnEl) ttsBtnEl.style.display = 'inline-flex';
+    } else if(modelSentenceEl) {
+      // fallback: use hint sentence
+      modelSentenceEl.textContent = prHintSentence || '';
+      if(ttsBtnEl && prHintSentence) ttsBtnEl.style.display = 'inline-flex';
+    }
     document.getElementById('pr-feedback').classList.add('visible');
   } catch(e) {
-    document.getElementById('pr-feedback-text').textContent = '오류: ' + (e.message || '다시 시도해주세요.');
+    const fbText = document.getElementById('pr-feedback-text');
+    if(e.message && e.message.includes('API_KEY')) {
+      fbText.innerHTML = '❌ API 키가 올바르지 않아요. <button onclick="showApiKeyModal()" style="color:var(--accent);background:none;border:none;cursor:pointer;text-decoration:underline">키 재설정</button>';
+    } else {
+      fbText.textContent = '오류: ' + (e.message || '다시 시도해주세요.');
+    }
     document.getElementById('pr-feedback').classList.add('visible');
   }
-  spinner.style.display = 'none'; btn.disabled = false;
+  spinner.style.display = 'none';
+  btn.disabled = false;
 }
 
-// ─── QUIZ ────────────────────────────────────────────────
+// ─── QUIZ ─────────────────────────────────────────────────
 function initQuiz() { quizScore = 0; quizTotal = 0; updateQuizScore(); nextQuiz(); }
 function updateQuizScore() { document.getElementById('quiz-score').textContent = `점수: ${quizScore} / ${quizTotal}`; }
+
 function nextQuiz() {
   if(!data.length) return;
   quizAnswered = false;
   document.getElementById('quiz-result').classList.remove('show','ok','fail');
   document.getElementById('quiz-next').classList.remove('show');
+
   const pool = data.filter(d => d.ex && d.ex.length > 10);
   if(!pool.length) { document.getElementById('quiz-sentence').textContent = '예문이 있는 표현이 없어요.'; return; }
   quizCurrent = pool[Math.floor(Math.random() * pool.length)];
+
   const regex = new RegExp(quizCurrent.e.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'), 'i');
   const sentence = quizCurrent.ex.replace(regex, '<span class="quiz-blank">_______________</span>');
   document.getElementById('quiz-sentence').innerHTML = sentence;
+
   const wrongs = shuffle(data.filter(d => d.e !== quizCurrent.e)).slice(0,3).map(d => d.e);
   const choices = shuffle([quizCurrent.e, ...wrongs]);
   const container = document.getElementById('quiz-choices');
   container.innerHTML = '';
   choices.forEach(c => {
-    const btn = document.createElement('button'); btn.className = 'choice-btn'; btn.textContent = c;
-    btn.onclick = () => selectAnswer(c, btn); container.appendChild(btn);
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.textContent = c;
+    btn.onclick = () => selectAnswer(c, btn);
+    container.appendChild(btn);
   });
 }
+
 function selectAnswer(choice, btn) {
   if(quizAnswered) return;
   quizAnswered = true; quizTotal++;
   const correct = choice === quizCurrent.e;
   if(correct) { quizScore++; btn.classList.add('correct'); }
-  else { btn.classList.add('wrong'); document.querySelectorAll('.choice-btn').forEach(b => { if(b.textContent === quizCurrent.e) b.classList.add('correct'); }); }
+  else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('.choice-btn').forEach(b => { if(b.textContent === quizCurrent.e) b.classList.add('correct'); });
+  }
   document.querySelectorAll('.choice-btn').forEach(b => b.disabled = true);
   const res = document.getElementById('quiz-result');
-  if(correct) { res.className = 'quiz-result show ok'; res.innerHTML = `✅ 정답! <b>${quizCurrent.e}</b> — ${quizCurrent.m}`; }
-  else { res.className = 'quiz-result show fail'; res.innerHTML = `❌ 오답. 정답은 <b>${quizCurrent.e}</b><br>뜻: ${quizCurrent.m}`; }
-  updateQuizScore(); document.getElementById('quiz-next').classList.add('show');
+  if(correct) {
+    res.className = 'quiz-result show ok';
+    res.innerHTML = `✅ 정답! <b>${quizCurrent.e}</b> — ${quizCurrent.m}`;
+  } else {
+    res.className = 'quiz-result show fail';
+    res.innerHTML = `❌ 오답. 정답은 <b>${quizCurrent.e}</b><br>뜻: ${quizCurrent.m}`;
+  }
+  updateQuizScore();
+  document.getElementById('quiz-next').classList.add('show');
 }
 
-// ─── LIST ────────────────────────────────────────────────
+// ─── LIST ─────────────────────────────────────────────────
 function renderList(query) {
   const q = query.toLowerCase();
   const filtered = data.filter(d => !q || d.e.toLowerCase().includes(q) || d.m.includes(q));
   document.getElementById('list-count').textContent = `${filtered.length}개 표현`;
-  const container = document.getElementById('expression-list'); container.innerHTML = '';
+  const container = document.getElementById('expression-list');
+  container.innerHTML = '';
   filtered.forEach(d => {
-    const el = document.createElement('div'); el.className = 'expr-item';
-    el.innerHTML = `<div class="expr-top"><span class="expr-name">${d.e}</span><span class="expr-kor">${d.m}</span></div><div class="expr-detail">${d.n ? `<div class="detail-row"><span class="dl">뉘앙스</span><span class="dv">${d.n}</span></div>` : ''}${d.ex ? `<div class="detail-row"><span class="dl">예문</span><span class="dv example-text">${d.ex}</span></div>` : ''}<div class="detail-row"><span class="dl">출처</span><span class="dv">${d.src === 'class' ? '📚 Class' : '🎬 Video'}</span></div></div>`;
-    el.onclick = () => el.classList.toggle('expanded'); container.appendChild(el);
+    const el = document.createElement('div');
+    el.className = 'expr-item';
+    el.innerHTML = `
+      <div class="expr-top">
+        <span class="expr-name">${d.e}</span>
+        <span class="expr-kor">${d.m}</span>
+      </div>
+      <div class="expr-detail">
+        ${d.n ? `<div class="detail-row"><span class="dl">뉘앙스</span><span class="dv">${d.n}</span></div>` : ''}
+        ${d.ex ? `<div class="detail-row"><span class="dl">예문</span><span class="dv example-text">${d.ex}</span></div>` : ''}
+        <div class="detail-row"><span class="dl">출처</span><span class="dv">${d.src === 'class' ? '📚 Class' : '🎬 Video'}</span></div>
+      </div>`;
+    el.onclick = () => el.classList.toggle('expanded');
+    container.appendChild(el);
   });
 }
 function filterList(q) { renderList(q); }
 
-// ─── UTILS ───────────────────────────────────────────────
+// ─── UTILS ────────────────────────────────────────────────
 function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
-function updateStats() { document.getElementById('total-count').textContent = data.length; document.getElementById('known-count').textContent = known.size; }
-function showApiKeyModal() { const modal = document.getElementById('apikey-modal'); modal.classList.remove('hidden'); const existing = localStorage.getItem('geminiApiKey'); if(existing) document.getElementById('apikey-input').value = existing; }
-function saveApiKey() { const key = document.getElementById('apikey-input').value.trim(); if(!key) { alert('API 키를 입력해주세요.'); return; } localStorage.setItem('geminiApiKey', key); document.getElementById('apikey-modal').classList.add('hidden'); }
-function skipApiKey() { document.getElementById('apikey-modal').classList.add('hidden'); }
-function checkApiKeyOnStart() { const key = localStorage.getItem('geminiApiKey'); if(!key) showApiKeyModal(); }
-
-async function geminiCall(prompt, maxTokens = 500) {
-  const apiKey = localStorage.getItem('geminiApiKey');
-  if (!apiKey) throw new Error('API 키 없음');
-  const models = ['gemini-1.5-flash', 'gemini-1.5-flash-latest', 'gemini-pro'];
-  let lastErr = null;
-  for (const model of models) {
-    try {
-      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
-        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { maxOutputTokens: maxTokens } })
-      });
-      const json = await res.json();
-      if (json.error) throw new Error(json.error.message);
-      const text = json.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
-      if (text) return text;
-    } catch(e) { lastErr = e; }
-  }
-  throw lastErr || new Error('모든 모델 실패');
+function updateStats() {
+  document.getElementById('total-count').textContent = data.length;
+  document.getElementById('known-count').textContent = known.size;
 }
 
-// ════════════════════════════════════════════════
-// VIDEO LEARNING MODULE
-// ════════════════════════════════════════════════
+// ─── TTS ──────────────────────────────────────────────────
+let currentUtterance = null;
 
-// ─── YouTube IFrame API ──────────────────────────
-window.onYouTubeIframeAPIReady = function() { playerReady = true; };
-(function() {
-  const tag = document.createElement('script');
-  tag.src = 'https://www.youtube.com/iframe_api';
-  document.head.appendChild(tag);
-})();
+function speakText(elementId, btnId) {
+  const el = document.getElementById(elementId);
+  const btn = document.getElementById(btnId);
+  if(!el) return;
 
-function extractVideoId(url) {
-  const patterns = [/(?:v=|\/embed\/|\.be\/)([a-zA-Z0-9_-]{11})/, /^([a-zA-Z0-9_-]{11})$/];
-  for (const p of patterns) { const m = url.match(p); if (m) return m[1]; }
-  return null;
-}
+  const text = el.textContent.trim();
+  if(!text || text === '—') return;
 
-function loadVideo() {
-  const url = document.getElementById('yt-url-input').value.trim();
-  if (!url) { alert('유튜브 URL을 입력해주세요.'); return; }
-  const vid = extractVideoId(url);
-  if (!vid) { alert('올바른 유튜브 URL을 입력해주세요.'); return; }
-
-  // Show player
-  document.getElementById('vl-setup').style.display = 'none';
-  document.getElementById('vl-player-wrap').classList.add('active');
-
-  // Load YouTube iframe via API
-  const iframe = document.getElementById('yt-iframe');
-  iframe.src = `https://www.youtube.com/embed/${vid}?enablejsapi=1&origin=${encodeURIComponent(location.origin)}&rel=0`;
-
-  // Init YT Player
-  ytPlayer = new YT.Player('yt-iframe', {
-    events: {
-      onReady: () => { playerReady = true; startSyncInterval(); },
-      onStateChange: (e) => {
-        if (e.data === YT.PlayerState.PLAYING) startSyncInterval();
-        else stopSyncInterval();
-      }
-    }
-  });
-
-  document.getElementById('vl-video-title').textContent = '🎬 비디오 학습';
-  renderSavedSection();
-}
-
-function resetVideo() {
-  stopSyncInterval();
-  ytPlayer = null; playerReady = false;
-  subtitles = []; currentSubIndex = -1; repeatMode = false;
-  document.getElementById('vl-setup').style.display = '';
-  document.getElementById('vl-player-wrap').classList.remove('active');
-  document.getElementById('yt-iframe').src = '';
-  document.getElementById('vl-sub-list').innerHTML = '<div class="empty-state">자막 파일을 업로드하면<br>여기에 표시돼요</div>';
-  document.getElementById('sub-count').textContent = '0';
-  document.getElementById('yt-url-input').value = '';
-  document.getElementById('srt-label-text').textContent = 'SRT 또는 VTT 자막 파일 선택';
-  document.getElementById('srt-label').classList.remove('has-file');
-}
-
-// ─── SRT/VTT Parser ──────────────────────────────
-function handleSrtUpload(input) {
-  const file = input.files[0]; if (!file) return;
-  document.getElementById('srt-label-text').textContent = '✓ ' + file.name;
-  document.getElementById('srt-label').classList.add('has-file');
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    const text = e.target.result;
-    subtitles = file.name.endsWith('.vtt') ? parseVTT(text) : parseSRT(text);
-    document.getElementById('sub-count').textContent = subtitles.length;
-    renderSubtitles();
-  };
-  reader.readAsText(file, 'UTF-8');
-}
-
-function parseSRT(text) {
-  const blocks = text.replace(/\r\n/g,'\n').replace(/\r/g,'\n').trim().split(/\n\n+/);
-  return blocks.map(b => {
-    const lines = b.split('\n'); if (lines.length < 3) return null;
-    const timeLine = lines.find(l => l.includes('-->'));
-    if (!timeLine) return null;
-    const [s, e] = timeLine.split('-->').map(t => srtTimeToSec(t.trim()));
-    const txt = lines.slice(lines.indexOf(timeLine)+1).join(' ').replace(/<[^>]+>/g,'').trim();
-    return { start: s, end: e, text: txt };
-  }).filter(Boolean);
-}
-
-function parseVTT(text) {
-  const lines = text.replace(/\r\n/g,'\n').split('\n');
-  const subs = []; let i = 0;
-  while (i < lines.length) {
-    if (lines[i].includes('-->')) {
-      const [s, e] = lines[i].split('-->').map(t => vttTimeToSec(t.trim().split(' ')[0]));
-      const txtLines = [];
-      i++;
-      while (i < lines.length && lines[i].trim() !== '') { txtLines.push(lines[i].replace(/<[^>]+>/g,'')); i++; }
-      if (txtLines.length) subs.push({ start: s, end: e, text: txtLines.join(' ') });
-    } else i++;
-  }
-  return subs;
-}
-
-function srtTimeToSec(t) {
-  const m = t.match(/(\d+):(\d+):(\d+)[,.](\d+)/);
-  if (!m) return 0;
-  return +m[1]*3600 + +m[2]*60 + +m[3] + +m[4]/1000;
-}
-function vttTimeToSec(t) {
-  const parts = t.split(':');
-  if (parts.length === 3) return +parts[0]*3600 + +parts[1]*60 + parseFloat(parts[2]);
-  return +parts[0]*60 + parseFloat(parts[1]);
-}
-function secToTimecode(s) {
-  const h = Math.floor(s/3600), m = Math.floor((s%3600)/60), sec = Math.floor(s%60);
-  return h > 0 ? `${h}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}` : `${m}:${String(sec).padStart(2,'0')}`;
-}
-
-// ─── Render Subtitles ────────────────────────────
-function renderSubtitles() {
-  const list = document.getElementById('vl-sub-list');
-  list.innerHTML = '';
-  subtitles.forEach((sub, idx) => {
-    const div = document.createElement('div');
-    div.className = 'sub-line'; div.id = 'sub-' + idx;
-    div.innerHTML = `<div class="sub-time">${secToTimecode(sub.start)}</div><div class="sub-text">${tokenizeWords(sub.text, idx)}</div><button class="sub-star" id="star-${idx}" onclick="toggleStar(${idx},event)" title="문장 저장">☆</button>`;
-    div.onclick = (e) => { if (e.target.classList.contains('sub-word') || e.target.classList.contains('sub-star')) return; seekToLine(idx); };
-    list.appendChild(div);
-  });
-  updateStarUI();
-}
-
-function tokenizeWords(text, lineIdx) {
-  return text.split(/(\s+)/).map(tok => {
-    if (/\s/.test(tok)) return tok;
-    const clean = tok.replace(/[^a-zA-Z']/g,'');
-    if (!clean) return tok;
-    return `<span class="sub-word" onmouseenter="showWordPopup(event,'${clean.replace(/'/g,"\\'")}',${lineIdx})" onclick="showWordPopup(event,'${clean.replace(/'/g,"\\'")}',${lineIdx})">${tok}</span>`;
-  }).join('');
-}
-
-// ─── Sync subtitles with playback ────────────────
-function startSyncInterval() {
-  if (syncInterval) return;
-  syncInterval = setInterval(syncSubtitles, 300);
-}
-function stopSyncInterval() { clearInterval(syncInterval); syncInterval = null; }
-
-function syncSubtitles() {
-  if (!ytPlayer || !ytPlayer.getCurrentTime) return;
-  const t = ytPlayer.getCurrentTime();
-  // Find current subtitle
-  let found = -1;
-  for (let i = 0; i < subtitles.length; i++) {
-    if (t >= subtitles[i].start && t < subtitles[i].end) { found = i; break; }
-  }
-  if (found === currentSubIndex) {
-    // Repeat mode check
-    if (repeatMode && repeatStart !== null && t >= repeatEnd - 0.1) {
-      ytPlayer.seekTo(repeatStart, true);
-    }
-    return;
-  }
-  // Remove old active
-  if (currentSubIndex >= 0) {
-    const old = document.getElementById('sub-' + currentSubIndex);
-    if (old) old.classList.remove('active-line');
-  }
-  currentSubIndex = found;
-  if (found >= 0) {
-    const el = document.getElementById('sub-' + found);
-    if (el) {
-      el.classList.add('active-line');
-      if (autoScroll) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-    // Repeat mode
-    if (repeatMode && repeatStart !== null && t >= repeatEnd - 0.1) {
-      ytPlayer.seekTo(repeatStart, true);
-    }
-  }
-}
-
-function seekToLine(idx) {
-  if (!ytPlayer || !ytPlayer.seekTo) return;
-  const sub = subtitles[idx];
-  ytPlayer.seekTo(sub.start, true);
-  if (repeatMode) { repeatStart = sub.start; repeatEnd = sub.end; }
-  ytPlayer.playVideo();
-}
-
-function toggleRepeat() {
-  repeatMode = !repeatMode;
-  document.getElementById('repeat-btn').classList.toggle('active', repeatMode);
-  document.getElementById('repeat-badge').style.display = repeatMode ? 'inline' : 'none';
-  if (!repeatMode) { repeatStart = null; repeatEnd = null; }
-  else if (currentSubIndex >= 0) {
-    repeatStart = subtitles[currentSubIndex].start;
-    repeatEnd = subtitles[currentSubIndex].end;
-  }
-}
-
-function replayCurrent() {
-  if (!ytPlayer || currentSubIndex < 0) return;
-  ytPlayer.seekTo(subtitles[currentSubIndex].start, true);
-  ytPlayer.playVideo();
-}
-
-function changeSpeed(v) {
-  if (ytPlayer && ytPlayer.setPlaybackRate) ytPlayer.setPlaybackRate(parseFloat(v));
-}
-
-function toggleAutoScroll() {
-  autoScroll = !autoScroll;
-  document.getElementById('autoscroll-badge').textContent = autoScroll ? 'ON' : 'OFF';
-}
-
-// ─── Star / save sentence ────────────────────────
-function toggleStar(idx, e) {
-  e.stopPropagation();
-  const sub = subtitles[idx];
-  const existing = savedSents.findIndex(s => s.text === sub.text);
-  if (existing >= 0) {
-    savedSents.splice(existing, 1);
-  } else {
-    savedSents.push({ text: sub.text, time: secToTimecode(sub.start) });
-  }
-  localStorage.setItem('vl_savedSents', JSON.stringify(savedSents));
-  updateStarUI();
-  renderSavedSection();
-}
-function updateStarUI() {
-  subtitles.forEach((sub, idx) => {
-    const star = document.getElementById('star-' + idx);
-    if (!star) return;
-    const saved = savedSents.some(s => s.text === sub.text);
-    star.textContent = saved ? '★' : '☆';
-    star.classList.toggle('starred', saved);
-  });
-}
-
-// ─── Word Popup ──────────────────────────────────
-let popupTimeout = null;
-async function showWordPopup(e, word, lineIdx) {
-  e.stopPropagation();
-  clearTimeout(popupTimeout);
-  const popup = document.getElementById('word-popup');
-  popupWord = word;
-
-  // Position
-  const rect = e.target.getBoundingClientRect();
-  let top = rect.bottom + window.scrollY + 8;
-  let left = rect.left + window.scrollX;
-  popup.style.top = top + 'px';
-  popup.style.left = Math.min(left, window.innerWidth - 300) + 'px';
-  popup.classList.add('visible');
-
-  // Reset
-  document.getElementById('wp-word').textContent = word;
-  document.getElementById('wp-pos').textContent = '';
-  document.getElementById('wp-meaning').innerHTML = '<span class="wp-loading">뜻 불러오는 중...</span>';
-  document.getElementById('wp-example').textContent = '';
-  const saveBtn = document.getElementById('wp-save-btn');
-  saveBtn.textContent = '+ 단어장에 저장';
-  saveBtn.classList.remove('saved');
-  saveBtn.disabled = false;
-  currentWordForPopup = { word, meaning: '', pos: '', example: '' };
-
-  // Check if already saved
-  if (savedWords.some(w => w.word.toLowerCase() === word.toLowerCase())) {
-    saveBtn.textContent = '✓ 이미 저장됨';
-    saveBtn.classList.add('saved');
-    saveBtn.disabled = true;
-  }
-
-  const apiKey = localStorage.getItem('geminiApiKey');
-  if (!apiKey) {
-    document.getElementById('wp-meaning').textContent = '(API 키 설정 필요)';
+  // Stop if already speaking
+  if(currentUtterance && window.speechSynthesis.speaking) {
+    window.speechSynthesis.cancel();
+    if(btn) btn.classList.remove('speaking');
+    currentUtterance = null;
     return;
   }
 
-  try {
-    const prompt = `Look up the English word "${word}". Reply in this exact JSON format with no markdown fences:
-{"pos":"품사(영어)","meaning_ko":"한국어 뜻 (2-4단어로 간결하게)","example":"짧은 영어 예문"}`;
-    const result = await geminiCall(prompt, 300);
-    let json;
-    try {
-      json = JSON.parse(result.replace(/```json|```/g,'').trim());
-    } catch {
-      // fallback: extract meaning from plain text
-      json = { pos: '', meaning_ko: result.slice(0, 60), example: '' };
-    }
-    document.getElementById('wp-pos').textContent = json.pos || '';
-    document.getElementById('wp-meaning').textContent = json.meaning_ko || word;
-    document.getElementById('wp-example').textContent = json.example ? '"' + json.example + '"' : '';
-    currentWordForPopup = { word, meaning: json.meaning_ko || '', pos: json.pos || '', example: json.example || '' };
-  } catch(err) {
-    document.getElementById('wp-meaning').textContent = '뜻: ' + err.message;
-  }
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = 'en-US';
+  utter.rate = 0.9;
+  utter.pitch = 1.0;
+
+  // Try to find a natural English voice
+  const voices = window.speechSynthesis.getVoices();
+  const preferred = voices.find(v =>
+    v.lang.startsWith('en') && (v.name.includes('Samantha') || v.name.includes('Karen') || v.name.includes('Daniel') || v.name.includes('Google'))
+  ) || voices.find(v => v.lang.startsWith('en'));
+  if(preferred) utter.voice = preferred;
+
+  if(btn) btn.classList.add('speaking');
+  utter.onend = () => { if(btn) btn.classList.remove('speaking'); currentUtterance = null; };
+  utter.onerror = () => { if(btn) btn.classList.remove('speaking'); currentUtterance = null; };
+
+  currentUtterance = utter;
+  window.speechSynthesis.speak(utter);
 }
 
-function closeWordPopup() {
-  document.getElementById('word-popup').classList.remove('visible');
-  currentWordForPopup = null;
-}
+function speakRaw(text, btnId) {
+  const btn = document.getElementById(btnId);
+  if(!text || text === '—') return;
 
-function saveWordFromPopup() {
-  if (!currentWordForPopup) return;
-  const { word } = currentWordForPopup;
-  if (savedWords.some(w => w.word.toLowerCase() === word.toLowerCase())) return;
-  savedWords.push(currentWordForPopup);
-  localStorage.setItem('vl_savedWords', JSON.stringify(savedWords));
-  const btn = document.getElementById('wp-save-btn');
-  btn.textContent = '✓ 저장됨'; btn.classList.add('saved'); btn.disabled = true;
-  renderSavedSection();
-}
-
-// Click outside popup to close
-document.addEventListener('click', (e) => {
-  const popup = document.getElementById('word-popup');
-  if (popup.classList.contains('visible') && !popup.contains(e.target) && !e.target.classList.contains('sub-word')) {
-    closeWordPopup();
-  }
-});
-
-// ─── Saved Section ───────────────────────────────
-function renderSavedSection() {
-  // words
-  const wList = document.getElementById('saved-words-list');
-  document.getElementById('saved-words-count').textContent = savedWords.length ? `(${savedWords.length})` : '';
-  if (!savedWords.length) { wList.innerHTML = '<div class="empty-state">아직 저장된 단어가 없어요.<br>자막에서 단어를 클릭해 팝업에서 저장하세요.</div>'; }
-  else {
-    wList.innerHTML = savedWords.map((w, i) => `<div class="saved-word-item"><div><div class="swi-word">${w.word}</div><div class="swi-meaning">${w.meaning || ''} ${w.pos ? '<span style="font-family:\'DM Mono\',monospace;font-size:0.65rem;color:var(--muted)">'+w.pos+'</span>' : ''}</div></div><button class="swi-delete" onclick="deleteSavedWord(${i})" title="삭제">✕</button></div>`).join('');
-  }
-  // sentences
-  const sList = document.getElementById('saved-sents-list');
-  document.getElementById('saved-sents-count').textContent = savedSents.length ? `(${savedSents.length})` : '';
-  if (!savedSents.length) { sList.innerHTML = '<div class="empty-state">아직 저장된 문장이 없어요.<br>자막 줄 오른쪽의 ☆를 눌러 저장하세요.</div>'; }
-  else {
-    sList.innerHTML = savedSents.map((s, i) => `<div class="saved-sent-item"><button class="ssi-delete" onclick="deleteSavedSent(${i})" title="삭제">✕</button><div class="ssi-text">${s.text}</div><div class="ssi-time">${s.time}</div></div>`).join('');
-  }
-}
-
-function switchSavedTab(tab) {
-  document.querySelectorAll('.vl-saved-tab').forEach(t => t.classList.toggle('active', t.dataset.sv === tab));
-  document.getElementById('saved-words-list').style.display = tab === 'words' ? '' : 'none';
-  document.getElementById('saved-sents-list').style.display = tab === 'sents' ? '' : 'none';
-}
-
-function deleteSavedWord(i) { savedWords.splice(i, 1); localStorage.setItem('vl_savedWords', JSON.stringify(savedWords)); renderSavedSection(); }
-function deleteSavedSent(i) { savedSents.splice(i, 1); localStorage.setItem('vl_savedSents', JSON.stringify(savedSents)); renderSavedSection(); updateStarUI(); }
-
-// ─── Video Quiz ───────────────────────────────────
-async function startVideoQuiz() {
-  const total = savedWords.length + savedSents.length;
-  if (total < 2) { alert('저장된 단어나 문장이 최소 2개 이상 있어야 테스트를 시작할 수 있어요!'); return; }
-  document.getElementById('vl-quiz-start-wrap').style.display = 'none';
-  document.getElementById('vl-quiz-inner').classList.add('active');
-  // Build quiz items from saved data
-  vlQuizItems = [];
-  savedWords.forEach(w => { if (w.word && w.meaning) vlQuizItems.push({ type: 'word', word: w.word, meaning: w.meaning, example: w.example }); });
-  savedSents.forEach(s => { if (s.text) vlQuizItems.push({ type: 'sent', text: s.text }); });
-  vlQuizItems = shuffle(vlQuizItems).slice(0, 10);
-  vlQuizIndex = 0;
-  renderVideoQuizItem();
-}
-
-function renderVideoQuizItem() {
-  if (vlQuizIndex >= vlQuizItems.length) {
-    document.getElementById('vl-quiz-q').innerHTML = '🎉 테스트 완료!';
-    document.getElementById('vl-quiz-ans').style.display = 'none';
-    document.getElementById('vl-quiz-submit-btn').style.display = 'none';
-    document.getElementById('vl-quiz-progress').textContent = `${vlQuizItems.length} / ${vlQuizItems.length} 완료`;
+  if(currentUtterance && window.speechSynthesis.speaking) {
+    window.speechSynthesis.cancel();
+    if(btn) btn.classList.remove('speaking');
+    currentUtterance = null;
     return;
   }
-  const item = vlQuizItems[vlQuizIndex];
-  document.getElementById('vl-quiz-progress').textContent = `${vlQuizIndex + 1} / ${vlQuizItems.length}`;
-  document.getElementById('vl-quiz-fb').classList.remove('show');
-  document.getElementById('vl-quiz-fb').textContent = '';
-  document.getElementById('vl-quiz-next-btn').style.display = 'none';
-  document.getElementById('vl-quiz-ans').value = '';
-  document.getElementById('vl-quiz-ans').style.display = '';
-  document.getElementById('vl-quiz-submit-btn').style.display = '';
-  document.getElementById('vl-quiz-submit-btn').disabled = false;
 
-  if (item.type === 'word') {
-    document.getElementById('vl-quiz-q').innerHTML = `<b>다음 뜻을 가진 영어 단어는?</b><br><br>🇰🇷 <b>${item.meaning}</b>${item.example ? '<br><br>예문: <i>' + item.example + '</i>' : ''}`;
-  } else {
-    // fill in blank for a word in the sentence
-    const words = item.text.split(' ');
-    const longWords = words.filter(w => w.replace(/[^a-zA-Z]/g,'').length >= 5);
-    if (!longWords.length) { vlQuizIndex++; renderVideoQuizItem(); return; }
-    const target = longWords[Math.floor(Math.random()*longWords.length)];
-    const blanked = item.text.replace(target, '<u>_______</u>');
-    document.getElementById('vl-quiz-q').innerHTML = `<b>빈칸에 알맞은 단어를 쓰세요</b><br><br>${blanked}`;
-    vlQuizItems[vlQuizIndex]._answer = target.replace(/[^a-zA-Z]/g,'');
-  }
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = 'en-US';
+  utter.rate = 0.9;
+  const voices = window.speechSynthesis.getVoices();
+  const preferred = voices.find(v => v.lang.startsWith('en') && (v.name.includes('Samantha') || v.name.includes('Google')))
+    || voices.find(v => v.lang.startsWith('en'));
+  if(preferred) utter.voice = preferred;
+  if(btn) btn.classList.add('speaking');
+  utter.onend = () => { if(btn) btn.classList.remove('speaking'); currentUtterance = null; };
+  utter.onerror = () => { if(btn) btn.classList.remove('speaking'); currentUtterance = null; };
+  currentUtterance = utter;
+  window.speechSynthesis.speak(utter);
 }
 
-async function submitVideoQuiz() {
-  const ans = document.getElementById('vl-quiz-ans').value.trim();
-  if (!ans) return;
-  const item = vlQuizItems[vlQuizIndex];
-  const btn = document.getElementById('vl-quiz-submit-btn');
-  const spinner = document.getElementById('vl-quiz-spinner');
-  btn.disabled = true; spinner.style.display = 'block';
-
-  let fb = '';
-  if (item.type === 'word') {
-    const correct = item.word.toLowerCase();
-    const given = ans.toLowerCase();
-    if (given === correct || correct.includes(given) || given.includes(correct)) {
-      fb = `✅ 정답! <b>${item.word}</b>`;
-    } else {
-      fb = `❌ 오답. 정답은 <b>${item.word}</b>`;
-    }
-  } else {
-    const correct = (item._answer || '').toLowerCase();
-    const given = ans.toLowerCase().replace(/[^a-z]/g,'');
-    if (given === correct) {
-      fb = `✅ 정답! <b>${item._answer}</b>`;
-    } else {
-      const apiKey = localStorage.getItem('geminiApiKey');
-      if (apiKey) {
-        try {
-          const result = await geminiCall(`The correct answer is "${item._answer}". The student answered "${ans}". Is this acceptable (synonyms, minor spelling)? Reply ONLY: "correct" or "incorrect: [correct answer]"`, 100);
-          if (result.toLowerCase().startsWith('correct')) fb = `✅ 정답! <b>${item._answer}</b>`;
-          else fb = `❌ 오답. 정답은 <b>${item._answer}</b>`;
-        } catch { fb = `❌ 오답. 정답은 <b>${item._answer}</b>`; }
-      } else fb = `❌ 오답. 정답은 <b>${item._answer}</b>`;
-    }
-  }
-
-  const fbEl = document.getElementById('vl-quiz-fb');
-  fbEl.innerHTML = fb; fbEl.classList.add('show');
-  spinner.style.display = 'none';
-  document.getElementById('vl-quiz-next-btn').style.display = 'block';
+// ─── API KEY ──────────────────────────────────────────────
+function showApiKeyModal() {
+  const modal = document.getElementById('apikey-modal');
+  modal.classList.remove('hidden');
+  const existing = localStorage.getItem('geminiApiKey');
+  if(existing) document.getElementById('apikey-input').value = existing;
 }
-
-function nextVideoQuiz() {
-  vlQuizIndex++;
-  renderVideoQuizItem();
+function saveApiKey() {
+  const key = document.getElementById('apikey-input').value.trim();
+  if(!key) { alert('API 키를 입력해주세요.'); return; }
+  localStorage.setItem('geminiApiKey', key);
+  document.getElementById('apikey-modal').classList.add('hidden');
+}
+function skipApiKey() {
+  document.getElementById('apikey-modal').classList.add('hidden');
+}
+function checkApiKeyOnStart() {
+  const key = localStorage.getItem('geminiApiKey');
+  if(!key) showApiKeyModal();
 }
 
 // ─── INIT ─────────────────────────────────────────────────
 loadData();
 setTimeout(checkApiKeyOnStart, 1200);
-renderSavedSection();
 </script>
 </body>
 </html>
