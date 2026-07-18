@@ -726,7 +726,7 @@ async function shufflePractice() {
 - 예시: "NPS는 이번 주주총회에서 반대표를 던지며 시장에 강한 신뢰의 메시지를 보냈다."`;
 
     const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -746,7 +746,7 @@ async function shufflePractice() {
     const hintPrompt = `Translate this Korean sentence to English using the expression "${prCurrent.e}": "${prKoreanSentence}"
 Output ONLY the English sentence, nothing else.`;
     const hintRes = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -801,7 +801,7 @@ Be specific, encouraging, and concise.`;
 
   try {
     const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${apiKey}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
