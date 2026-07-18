@@ -732,13 +732,14 @@ async function shufflePractice() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: { maxOutputTokens: 200 }
+          generationConfig: { maxOutputTokens: 800, thinkingConfig: { thinkingBudget: 0 } }
         })
       }
     );
     const json = await res.json();
     if(json.error) throw new Error(json.error.message);
     prKoreanSentence = json.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '';
+    if(!prKoreanSentence) throw new Error('빈 응답');
     document.getElementById('pr-korean').textContent = prKoreanSentence;
 
     // Also pre-generate hint
@@ -751,7 +752,7 @@ Output ONLY the English sentence, nothing else.`;
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           contents: [{ parts: [{ text: hintPrompt }] }],
-          generationConfig: { maxOutputTokens: 200 }
+          generationConfig: { maxOutputTokens: 800, thinkingConfig: { thinkingBudget: 0 } }
         })
       }
     );
@@ -806,7 +807,7 @@ Be specific, encouraging, and concise.`;
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: { maxOutputTokens: 1000 }
+          generationConfig: { maxOutputTokens: 2000, thinkingConfig: { thinkingBudget: 0 } }
         })
       }
     );
